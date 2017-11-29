@@ -3,6 +3,6 @@ require 'sinatra'
 
 class Reviewable < Sinatra::Base
   get '/' do
-    "Hello, world!"
+    File.read(File.join('public', 'index.html'))
   end
 end
