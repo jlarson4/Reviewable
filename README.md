@@ -1,6 +1,6 @@
 # Reviewable
 
 
-To run the server navigate to the project directory and run "bin/rails server"
+To run the server navigate to the project directory and run "rackup"
 
-To get the lastest version of master navigate to the project directory and run "git pull origin master"
+To compile react files to build.min.js run "npm run dev"
