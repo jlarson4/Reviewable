@@ -2,25 +2,20 @@ import * as React from 'react';
 import { render } from 'react-dom';	
 
 
-// import { RPHeader, IRPHeaderProps } from './modules/RPHeader';
+import { PracticeComp } from './modules/PracticeComp.js';
 // import { RPToDo, IRPToDoProps } from './modules/RPToDo';
 
 class App extends React.Component {
 
 
 	render() {
-		//let w = window;
+		let props = {
+			menuItems: 'whats up doc'
+		};
 		return  (
-			<p> This is a react app.. YAS IT WORKS.. and webpack is watching </p> 
+			<PracticeComp {...props}/> 
 		);
 	}
-
-	// renderContent(props) {
-	// 	switch (props.data.page_template) {
- //      		case 'home-content': return <RPToDo {...props.data} />
-	// 		default: return <div></div>
-	// 	}
-	// }
 }
 
 
