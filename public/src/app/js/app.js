@@ -10,13 +10,12 @@ class App extends React.Component {
 
 	render() {
 		let props = {
-			menuItems: 'whats up doc'
+			menuItems: ['Buildings', 'Classes', 'People']
 		};
 		return  (
 			<PracticeComp {...props}/> 
 		);
 	}
 }
-
 
 render( <App />, document.getElementById('react-root'));
