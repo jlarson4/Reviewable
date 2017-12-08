@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { render } from 'react-dom';	
+import 'whatwg-fetch'
 
 
 import { MapComponent } from './modules/MapComponent.js';
@@ -9,7 +10,7 @@ class App extends React.Component {
 
 
 	render() {
-		
+		this.requestReviewableDataFromServer();
 		let props = {
 			marker_info: [
 				{
@@ -32,6 +33,27 @@ class App extends React.Component {
 		return  (
 			<MapComponent {...props}/> 
 		);
+	}
+
+	requestReviewableDataFromServer(){
+		let categories = {
+			category: ['building', 'people', 'classes'],
+			sub_category: [],
+			title: [],
+			school_id: 0
+
+		}
+		let marker_info = null;
+		let data = new FormData();
+		data.append( "json", JSON.stringify( categories ) );
+		fetch('/getpins', {
+			method: 'POST',
+			body: data
+		}).then(function(response: any){
+			response.json().then(function(result: any){
+				console.log(result);
+			}.bind(this))
+		}.bind(this))
 	}
 }
 

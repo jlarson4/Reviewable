@@ -57,6 +57,7 @@ export class GoogleMap {
 		this.long = long;
 		this.zoom = zoom;
 		this.marker_info = marker_info;
+		this.markers = [];
 	}
 
 	mapHeight(){
@@ -100,11 +101,13 @@ export class GoogleMap {
 					map: map,
 					icon: mark['mark']
 				});
+				this.markers.push(marker);
 			} else {
 				let marker = new google.maps.Marker({
 					position: {lat , lng },
 					map: map
 				});
+				this.markers.push(marker);
 			}
 			
 		}
