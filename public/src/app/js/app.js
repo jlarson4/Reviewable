@@ -2,9 +2,9 @@ import * as React from 'react';
 import { render } from 'react-dom';	
 import 'whatwg-fetch'
 
-
 import { MapComponent } from './modules/MapComponent.js';
 import { GoogleMap } from './modules/GoogleMap.js';
+import { PracticeComp } from './modules/PracticeComp.js';
 
 class App extends React.Component {
 
@@ -28,10 +28,14 @@ class App extends React.Component {
 			],
 			zoom: 12,
 			lat: 42.587664,
-			long: -87.856703
+			long: -87.856703,
+			menuItems: ['Buildings', 'Classes', 'People']
 		};
 		return  (
-			<MapComponent {...props}/> 
+			<div>
+				<PracticeComp {...props}/> 
+				<MapComponent {...props}/> 
+			</div>
 		);
 	}
 
@@ -59,4 +63,3 @@ class App extends React.Component {
 
 
 render( <App />, document.getElementById('react-root'));
-
