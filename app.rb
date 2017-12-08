@@ -15,46 +15,46 @@ class Reviewable < Sinatra::Base
             primary_key :usernameID
                 String :username, :unique=>TRUE
                 String :password
-                String :FirstName
-                String :LastName
-                String :Email, :unique=>TRUE
-                String :HomeSchool
-                String :Admin             
+                String :firstName
+                String :lastName
+                String :email, :unique=>TRUE
+                String :homeSchool
+                String :admin             
               end
 
            DB.create_table? :schools do
-             primary_key :SchoolID
-                 String :SchoolName
-                 String :SchoolCoordinates        
+             primary_key :schoolID
+                 String :schoolName
+                 String :schoolCoordinates        
                 end
 
           DB.create_table? :buildings do
-                    primary_key :BuildingID
-                        String :SchoolID
-                        String :Name
-                        Int :NoOfFloors       
-                        String :Coordinates    
+                    primary_key :buildingID
+                        String :schoolID
+                        String :name
+                        Int :noOfFloors       
+                        String :coordinates    
                   end
 
           DB.create_table? :reviewobjects do
-                   primary_key :ReviewablesID
+                   primary_key :reviewablesID
                         String :username                       
-                        String :ReviewableName
-                        String :ReviewableDescription
-                        String :Category
-                        String :SubCategory
-                        String :Coordinates     
+                        String :reviewableName
+                        String :reviewableDescription
+                        String :category
+                        String :subCategory
+                        String :coordinates     
 
                       end
 
           DB.create_table? :reviews do
                    primary_key :reviewID
                         String :username
-                        Int :ReviewablesID
-                        Int :Rating
-                        String :ReviewText
-                        Int :UpvotesTotal
-                        Int :DownvotesTotal             
+                        Int :reviewablesID
+                        Int :rating
+                        String :reviewText
+                        Int :upvotesTotal
+                        Int :downvotesTotal             
                       end               
         
 
