@@ -18,10 +18,20 @@ export class PracticeComp extends React.Component {
 
 	menuArrowClicked(string) {
 		console.log(string);
-			/*menu is closed - expand it*/
-			let array=this.state.menuArrowArr;
+
+		let array=this.state.menuArrowArr;
+		if (this.state.menuArrowArr.includes("one"))
+		{
+			/*the menu is open - close it.*/
+			let index = array.indexOf("one");
+			array.splice(index, 1);
+		}
+		else
+		{
+			/*the menu is closed - open it.*/
 			array.push("one");
-			this.setState(this.state.menuArrowArr, array);
+		}
+		this.setState(this.state.menuArrowArr, array);
 	}
 
 	renderBuildingSubMenu() {
