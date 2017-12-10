@@ -7,18 +7,29 @@ export class PracticeComp extends React.Component {
 	constructor(props) {
 		super(props)
 		//this.state = {buildingsState:"open", classesState:"closed", peopleState:"open"};
-		this.state = {menuArrowArr:["one", "two"]};
+		this.state = {
+			menuArrowArr:["two", "three"],
+		};
 		this.renderBuildingSubMenu = this.renderBuildingSubMenu.bind(this);
 		this.renderClassesSubMenu = this.renderClassesSubMenu.bind(this);
 		this.renderPeopleSubMenu = this.renderPeopleSubMenu.bind(this);
+		this.menuArrowClicked = this.menuArrowClicked.bind(this);
 	}
 
-	renderBuildingSubMenu(string) {
+	menuArrowClicked(string) {
+		console.log(string);
+			/*menu is closed - expand it*/
+			let array=this.state.menuArrowArr;
+			array.push("one");
+			this.setState(this.state.menuArrowArr, array);
+	}
+
+	renderBuildingSubMenu() {
 		if (this.state.menuArrowArr.includes("one"))
 		{
 			return(
 					<h3>
-						<label className="container" for="XXXstring">
+						<label className="container" for="XXXstring" >
 		  				<input type="checkbox" name="XXXstring" />
 		  				<span className="checkmark"></span>
 							<span className="mapMenuText">Building option #1</span>
@@ -30,35 +41,35 @@ export class PracticeComp extends React.Component {
 	}
 
 	renderClassesSubMenu() {
-		//if (this.state.classesState==="open")
-		//{
+		if (this.state.menuArrowArr.includes("two"))
+		{
 			return(
 					<h3>
-						<label className="container">
-		  				<input type="checkbox" />
+						<label className="container" for="XXXstring" >
+		  				<input type="checkbox" name="XXXstring" />
 		  				<span className="checkmark"></span>
+							<span className="mapMenuText">Classes option #1</span>
 						</label>
-						<span className="mapMenuText">Classes option #1</span>
 						<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow" />
 					</h3>
 			)
-		//}
+		}
 	}
 
 	renderPeopleSubMenu() {
-		//if (this.state.peopleState==="open")
-		//{
+		if (this.state.menuArrowArr.includes("three"))
+		{
 			return(
 					<h3>
-						<label className="container">
-		  				<input type="checkbox" />
+						<label className="container" for="XXXstring" >
+		  				<input type="checkbox" name="XXXstring" />
 		  				<span className="checkmark"></span>
+							<span className="mapMenuText">People option #1</span>
 						</label>
-						<span className="mapMenuText">People option #1</span>
 						<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow" />
 					</h3>
 			)
-		//}
+		}
 	}
 
 	render() {
@@ -72,8 +83,7 @@ export class PracticeComp extends React.Component {
   				<span className="checkmark"></span>
 					<span className="mapMenuText">{this.props.menuItems[0]}</span>
 				</label>
-
-				<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow" id="one" />
+				<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow" id="one" onClick={() => this.menuArrowClicked(this.id)} />
 			</h2>
 			{this.renderBuildingSubMenu()}
 			<h2>
@@ -91,12 +101,9 @@ export class PracticeComp extends React.Component {
   				<span className="checkmark"></span>
 					<span className="mapMenuText">{this.props.menuItems[2]}</span>
 				</label>
-
 				<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow" />
 			</h2>
-
 			{this.renderPeopleSubMenu()}
-
 			<div className="mapMenuButton"><button> Make A Rating</button></div>
 		</div>
 		)
