@@ -64,9 +64,6 @@ class Reviewable < Sinatra::Base
         require_relative 'Building'
         require_relative 'Reviewobject'
 
-
-
-
   end
 
 post '/getReviews' do
@@ -112,7 +109,7 @@ post '/signUp' do
 
   if User.where(:username => payload['username']) == null && User.where(:email => payload['email'])
 
-      User.create(:username => payload['username'], :password => payload['password'], :email => payload['email'], :firstName => payload['firstName'], :lastName => payload['lastName'])
+      User.create(:username => payload['username'], :password => payload['password'], :Email => payload['email'], :FirstName => payload['firstName'], :LastName => payload['lastName'])
 
       retVal = true
   end
