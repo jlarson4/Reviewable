@@ -107,9 +107,9 @@ post '/signUp' do
 
   payload = JSON.parse(request.body.read)
 
-  if User.where(:username => payload['username']) == null && User.where(:email => payload['email'])
+  if User.where(:username => payload['username']).empty? == true && User.where(:email => payload['email']).empty? == true
 
-      User.create(:username => payload['username'], :password => payload['password'], :Email => payload['email'], :FirstName => payload['firstName'], :LastName => payload['lastName'])
+      User.create(:username => payload['username'], :password => payload['password'], :email => payload['email'], :firstName => payload['firstName'], :lastName => payload['lastName'])
 
       retVal = true
   end
@@ -120,15 +120,17 @@ post '/signUp' do
       
   end
 
-post 'signIn' do
+post '/signIn' do
 
   puts "/singIn SUCESS"
 
   payload = JSON.parse(request.body.read)
 
-  retVal = false
 
-  if (User.where(:username => payload['username'] , :password => payload['password']) != null)
+  retVal = false
+  #userTable = User.where(:username => payload['username'])
+
+  if User.where(:username => payload['username']).empty? == false && User.where(:username => payload['username']).get(:password) == payload['password']
     retVal = true
     end
 

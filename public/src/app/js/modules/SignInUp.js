@@ -87,8 +87,7 @@ export class SignInUp extends React.Component {
 			firstName: 'Bob',
 			lastName: 'Johnson'
 		}
-		let data = {};
-		data["json"] = JSON.stringify( categories );
+		let data = JSON.stringify( categories );
 		fetch('./signUp', {
 			method: 'POST',
 			body: data
