@@ -59,9 +59,8 @@ button {
 }
 
 .mapMenuArrow{
-	float: right;
-	margin-left: 30px;
-	margin-bottom: -30px;
+	/*float: right;*/
+	vertical-align: middle;
 	/*margin-bottom: 0px;*/
 }
 
@@ -91,7 +90,8 @@ button {
 
 /* Customize the label (the container) */
 .container {
-  display: inline;
+  display: inline-block;
+	width: 80%;
   position: relative;
   padding-left: 35px;
 

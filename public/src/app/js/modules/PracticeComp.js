@@ -6,9 +6,9 @@ const velocity = require('velocity-react');
 export class PracticeComp extends React.Component {
 	constructor(props) {
 		super(props)
-		//this.state = {buildingsState:"open", classesState:"closed", peopleState:"open"};
 		this.state = {
 			menuArrowArr:["two", "three"],
+			idVal:"1"
 		};
 		this.renderBuildingSubMenu = this.renderBuildingSubMenu.bind(this);
 		this.renderClassesSubMenu = this.renderClassesSubMenu.bind(this);
@@ -16,22 +16,30 @@ export class PracticeComp extends React.Component {
 		this.menuArrowClicked = this.menuArrowClicked.bind(this);
 	}
 
-	menuArrowClicked(string) {
-		console.log(string);
+	menuArrowClicked(string)
+	{
+		console.log(string.target.id);
 
 		let array=this.state.menuArrowArr;
-		if (this.state.menuArrowArr.includes("one"))
+		if (this.state.menuArrowArr.includes(string))
 		{
 			/*the menu is open - close it.*/
-			let index = array.indexOf("one");
+			let index = array.indexOf(string);
 			array.splice(index, 1);
 		}
 		else
 		{
 			/*the menu is closed - open it.*/
-			array.push("one");
+			array.push(string);
 		}
-		this.setState(this.state.menuArrowArr, array);
+		this.setState({menuArrowArr, array});
+	}
+
+	incrementNumber() {
+		let num=parseInt(this.state.idVal);
+		num++;
+		let retVal=num.toString();
+		this.state.idVal=retVal;
 	}
 
 	renderBuildingSubMenu() {
@@ -93,7 +101,9 @@ export class PracticeComp extends React.Component {
   				<span className="checkmark"></span>
 					<span className="mapMenuText">{this.props.menuItems[0]}</span>
 				</label>
-				<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow" id="one" onClick={() => this.menuArrowClicked(this.id)} />
+				{this.incrementNumber()}
+				<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow" id={this.state.idVal} onClick={(event) => this.menuArrowClicked(event)} />
+				{this.incrementNumber()}
 			</h2>
 			{this.renderBuildingSubMenu()}
 			<h2>
