@@ -62,8 +62,8 @@ export class SignInUp extends React.Component {
 						<input type='text' placeholder='Email' name='email' id='email'/>
 						<h5 className='logSubHeader'><label htmlFor='confirmpassword'> Confirm Password </label></h5>
 						<input type='password' placeholder='Confirm Password' name='confirmpassword' id='cp'/>
-						<h5 className='logSubHeader'><label htmlFor='firstname'> Last Name </label></h5>
-						<input type='text' placeholder='Last Name' name='firstname' id='ln'/>
+						<h5 className='logSubHeader'><label htmlFor='lastname'> Last Name </label></h5>
+						<input type='text' placeholder='Last Name' name='lastname' id='ln'/>
 					</div>
 					<p className='desc'>*your name will not appear anywhere on site, we require a first and last name for security purposes only </p>
 					<div className="submitButtons">
@@ -81,29 +81,45 @@ export class SignInUp extends React.Component {
 
 	submitSignUp(){
 		let u = document.getElementById('username').value;
-		console.log(u)
-		let categories = {
-			username: 'Test',
-			password:'Test',
-			email:'Test@gmail.com',
-			firstName: 'Bob',
-			lastName: 'Johnson'
-		}
-		let data = JSON.stringify( categories );
-		fetch('./signUp', {
-			method: 'POST',
-			body: data
-		}).then(function(response: any){
-			response.json().then(function(result: any){
-				console.log(result);
+		let p = document.getElementById('password').value;
+		let p2 = document.getElementById('cp').value;
+		let fn = document.getElementById('fn').value;
+		let ln = document.getElementById('ln').value;
+		let e = document.getElementById('email').value;
+
+		if(p == p2){
+			let categories = {
+				username: u,
+				password: p,
+				email: e,
+				firstName: fn,
+				lastName: ln
+			}
+			let data = JSON.stringify( categories );
+			console.log(data)
+			fetch('./signUp', {
+				method: 'POST',
+				body: data
+			}).then(function(response: any){
+				response.json().then(function(result: any){
+					if(result['signed_up']){
+						this.props.function_pointer(true, 'Test');
+					}
+				}.bind(this))
 			}.bind(this))
-		}.bind(this))
+		} else {
+			$('#password').addClass('error');
+			$('#cp').addClass('error');
+			$('.desc').append('<div><span class="error">Your two passwords did not match, retry</span></div>')
+		}
 	}
 
 	submitSignIn(){
+		let u = document.getElementById('username').value;
+		let p = document.getElementById('password').value;
 		let categories = {
-			username: 'Test',
-			password: 'Test'
+			username: u,
+			password: p
 		}
 		let data = JSON.stringify( categories );
 		fetch('./signIn', {

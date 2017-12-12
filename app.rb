@@ -75,7 +75,7 @@ post '/getReviews' do
 puts payload
   puts
   puts
-  
+
   reviewList = Array.new()
 
   Review.where(:reviewableID => payload['reviewableID']).each do |review|
@@ -118,7 +118,7 @@ post '/signUp' do
   puts
   puts
 
-  if User.where(:username => payload['username']) == nil && User.where(:email => payload['email'])
+  if User.where(:username => payload['username']) == nil && User.where(:email => payload['email'] == nil)
 
       User.create(:username => payload['username'], :password => payload['password'], :Email => payload['email'], :FirstName => payload['firstName'], :LastName => payload['lastName'])
 

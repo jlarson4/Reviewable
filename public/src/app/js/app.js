@@ -6,6 +6,7 @@ import { MapComponent } from './modules/MapComponent.js';
 import { GoogleMap } from './modules/GoogleMap.js';
 import { PracticeComp } from './modules/PracticeComp.js';
 import { SignInUp } from './modules/SignInUp.js';
+import { UserModal } from './modules/UserModal.js';
 
 const velocity = require('velocity-react');
 
@@ -78,7 +79,8 @@ class App extends React.Component {
 			return  (
 				<div>
 					<PracticeComp {...props}/> 
-					<MapComponent {...props}/> 
+					<MapComponent {...props}/>
+					{/*<UserModal {...props}/>*/}
 				</div>
 			);
 		}
@@ -97,8 +99,7 @@ class App extends React.Component {
 
 		}
 		let marker_info = null;
-		let data = new FormData();
-		data.append( "json", JSON.stringify( categories ) );
+		let data = JSON.stringify( categories );
 		fetch('/getpins', {
 			method: 'POST',
 			body: data
