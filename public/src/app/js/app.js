@@ -7,6 +7,8 @@ import { GoogleMap } from './modules/GoogleMap.js';
 import { PracticeComp } from './modules/PracticeComp.js';
 import { SignInUp } from './modules/SignInUp.js';
 
+const velocity = require('velocity-react');
+
 class App extends React.Component {
 
 	constructor(){
@@ -18,44 +20,70 @@ class App extends React.Component {
 
 
 	render() {
-		this.requestReviewableDataFromServer();
-		let props = {
-			marker_info: [
-				{
-					lat: 42.587664,
-					long: -87.856703
-				},
-				{
-					lat: 42.603724,
-					long: -87.846253
-				},
-				{
-					lat: 42.576543,
-					long: -87.833120
-				}
-			],
-			zoom: 12,
-			lat: 42.587664,
-			long: -87.856703,
-			menuItems: ['Buildings', 'Classes', 'People']
-		};
 
-		let sign_props = {
+		return  (
+			<div>
+				<velocity.VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
+					{this.renderLogging()}
+					{this.renderHome()} 
+				</velocity.VelocityTransitionGroup>
+			</div>
+		);
+		
+	}
 
+	renderLogging(){
+		if(!this.state.logged_in) {
+			let sign_props = {
+				function_pointer: this.setLoggedIn.bind(this)
+			}
+
+			return (
+				<SignInUp {...sign_props}/>
+			)
 		}
+	}
+
+	renderHome(){
 		if(this.state.logged_in) {
+			this.requestReviewableDataFromServer();
+			let props = {
+				marker_info: [
+					{
+						lat: 42.6245,
+						long: -87.820000,
+						title: 'David A. Straz, Jr. Center',
+						id: 0
+					},
+					{
+						lat: 42.6238,
+						long: -87.819850,
+						title: 'Lentz Hall',
+						id: 1
+					},
+					{
+						lat: 42.576543,
+						long: -87.833120,
+						title: 'Stuff and Things!',
+						id: 2
+					}
+				],
+				zoom: 17,
+				lat: 42.6218,
+				long: -87.821127,
+				menuItems: ['Buildings', 'Classes', 'People']
+			};
 			return  (
 				<div>
 					<PracticeComp {...props}/> 
 					<MapComponent {...props}/> 
 				</div>
 			);
-		} else {
-			return (
-				<SignInUp {...sign_props}/>
-			)
 		}
-		
+	}
+
+	resizeWindow(){
+		$(window).trigger('resize');
 	}
 
 	requestReviewableDataFromServer(){
@@ -77,6 +105,10 @@ class App extends React.Component {
 		// 		console.log(result);
 		// 	}.bind(this))
 		// }.bind(this))
+	}
+
+	setLoggedIn(val){
+		this.setState({logged_in: true});
 	}
 }
 
