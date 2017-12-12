@@ -7,8 +7,7 @@ export class PracticeComp extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			menuArrowArr:["two", "three"],
-			idVal:"1"
+			menuArrowArr:[]
 		};
 		this.renderBuildingSubMenu = this.renderBuildingSubMenu.bind(this);
 		this.renderClassesSubMenu = this.renderClassesSubMenu.bind(this);
@@ -21,70 +20,77 @@ export class PracticeComp extends React.Component {
 		console.log(string.target.id);
 
 		let array=this.state.menuArrowArr;
-		if (this.state.menuArrowArr.includes(string))
+		if (this.state.menuArrowArr.includes(string.target.id))
 		{
 			/*the menu is open - close it.*/
-			let index = array.indexOf(string);
+			let index = array.indexOf(string.target.id);
 			array.splice(index, 1);
 		}
 		else
 		{
 			/*the menu is closed - open it.*/
-			array.push(string);
+			array.push(string.target.id);
 		}
-		this.setState({menuArrowArr, array});
-	}
-
-	incrementNumber() {
-		let num=parseInt(this.state.idVal);
-		num++;
-		let retVal=num.toString();
-		this.state.idVal=retVal;
+		this.setState(this.state.menuArrowArr, array);
 	}
 
 	renderBuildingSubMenu() {
-		if (this.state.menuArrowArr.includes("one"))
+		if (this.state.menuArrowArr.includes("Buildings"))
 		{
 			return(
 					<h3>
-						<label className="container" for="XXXstring" >
+						<label className="container2" for="XXXstring" >
 		  				<input type="checkbox" name="XXXstring" />
 		  				<span className="checkmark"></span>
-							<span className="mapMenuText">Building option #1</span>
+							<span className="mapMenuText">DSC</span>
 						</label>
-						<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow" />
+						<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow2" id="DSC" onClick={(event) => this.menuArrowClicked(event)} />
+						{this.renderShit()}
 					</h3>
 			)
 		}
 	}
 
+	renderShit() {
+		return (
+			<h4>
+				<label className="container3" for="XXXstring" >
+					<input type="checkbox" name="XXXstring" />
+					<span className="checkmark"></span>
+					<span className="mapMenuText">199</span>
+				</label>
+				<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow3" id="199" onClick={(event) => this.menuArrowClicked(event)} />
+			</h4>
+		)
+	}
+
 	renderClassesSubMenu() {
-		if (this.state.menuArrowArr.includes("two"))
+		if (this.state.menuArrowArr.includes("Classes"))
 		{
 			return(
 					<h3>
-						<label className="container" for="XXXstring" >
+						<label className="container2" for="XXXstring" >
 		  				<input type="checkbox" name="XXXstring" />
 		  				<span className="checkmark"></span>
-							<span className="mapMenuText">Classes option #1</span>
+							<span className="mapMenuText">Boring Shit</span>
 						</label>
-						<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow" />
+						<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow2" id="Boring Shit" onClick={(event) => this.menuArrowClicked(event)} />
 					</h3>
 			)
 		}
 	}
 
 	renderPeopleSubMenu() {
-		if (this.state.menuArrowArr.includes("three"))
+		if (this.state.menuArrowArr.includes("People"))
 		{
 			return(
 					<h3>
-						<label className="container" for="XXXstring" >
+						<label className="container2" for="XXXstring" >
 		  				<input type="checkbox" name="XXXstring" />
 		  				<span className="checkmark"></span>
-							<span className="mapMenuText">People option #1</span>
+							<span className="mapMenuText">That one fucking botch who i hate with a passion</span>
 						</label>
-						<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow" />
+						<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow2" id="Logan" onClick={(event) => this.menuArrowClicked(event)} />
 					</h3>
 			)
 		}
@@ -101,9 +107,7 @@ export class PracticeComp extends React.Component {
   				<span className="checkmark"></span>
 					<span className="mapMenuText">{this.props.menuItems[0]}</span>
 				</label>
-				{this.incrementNumber()}
-				<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow" id={this.state.idVal} onClick={(event) => this.menuArrowClicked(event)} />
-				{this.incrementNumber()}
+				<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow" id={this.props.menuItems[0]} onClick={(event) => this.menuArrowClicked(event)} />
 			</h2>
 			{this.renderBuildingSubMenu()}
 			<h2>
@@ -112,7 +116,7 @@ export class PracticeComp extends React.Component {
   				<span className="checkmark"></span>
 					<span className="mapMenuText">{this.props.menuItems[1]}</span>
 				</label>
-				<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow" />
+				<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow" id={this.props.menuItems[1]} onClick={(event) => this.menuArrowClicked(event)} />
 			</h2>
 			{this.renderClassesSubMenu()}
 			<h2>
@@ -121,7 +125,7 @@ export class PracticeComp extends React.Component {
   				<span className="checkmark"></span>
 					<span className="mapMenuText">{this.props.menuItems[2]}</span>
 				</label>
-				<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow" />
+				<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow" id={this.props.menuItems[2]} onClick={(event) => this.menuArrowClicked(event)} />
 			</h2>
 			{this.renderPeopleSubMenu()}
 			<div className="mapMenuButton"><button> Make A Rating</button></div>

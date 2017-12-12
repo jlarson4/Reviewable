@@ -97,7 +97,7 @@ button {
 
   margin-bottom: -5px;
   cursor: pointer;
-  font-size: 22px;
+  /*font-size: 22px;*/
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -137,6 +137,108 @@ button {
 }
 /* Style the checkmark/indicator */
 .container .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+/*indented container*/
+.container2 {
+  display: inline-block;
+	width: 70%;
+  position: relative;
+  padding-left: 35px;
+
+  margin-bottom: -5px;
+  cursor: pointer;
+	margin-left: 15;
+  /*font-size: 22px;*/
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.mapMenuArrow2{
+	/*float: right;*/
+	vertical-align: middle;
+	margin-left: 22;
+	/*margin-right: 55px;*/
+	/*margin-bottom: 0px;*/
+}
+.container2 input {
+  position: absolute;
+  opacity: 0;
+}
+/* On mouse-over, add a grey background color */
+.container2:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+/* When the checkbox is checked, add a blue background */
+.container2 input:checked ~ .checkmark {
+  background-color: #2196F3;
+}
+/* Show the checkmark when checked */
+.container2 input:checked ~ .checkmark:after {
+  display: block;
+}
+/* Style the checkmark/indicator */
+.container2 .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+/*indented indented container*/
+.container3 {
+  display: inline-block;
+	width: 60%;
+  position: relative;
+  padding-left: 35px;
+
+  margin-bottom: -5px;
+  cursor: pointer;
+	margin-left: 35;
+  /*font-size: 22px;*/
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.mapMenuArrow3{
+	/*float: right;*/
+	vertical-align: middle;
+	margin-left: 40;
+	/*margin-right: 24;*/
+	/*margin-bottom: 0px;*/
+}
+.container3 input {
+  position: absolute;
+  opacity: 0;
+}
+/* On mouse-over, add a grey background color */
+.container3:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+/* When the checkbox is checked, add a blue background */
+.container3 input:checked ~ .checkmark {
+  background-color: #2196F3;
+}
+/* Show the checkmark when checked */
+.container3 input:checked ~ .checkmark:after {
+  display: block;
+}
+/* Style the checkmark/indicator */
+.container3 .checkmark:after {
   left: 9px;
   top: 5px;
   width: 5px;
