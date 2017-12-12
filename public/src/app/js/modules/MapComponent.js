@@ -14,7 +14,10 @@ export class MapComponent extends React.Component {
 		this.state = {
 			markerClicked: false,
 			activeMarker: -1,
-			markers: this.props.marker_info
+			markers: this.props.marker_info,
+			markerTitle: '',
+			markerID: 0,
+			reviews: []
 		}
 	}
 
@@ -51,44 +54,49 @@ export class MapComponent extends React.Component {
 
 	renderModal() {
 		if(this.state.markerClicked){
+			this.requestReviewsFromServer();
 			let props = {
-				reviews: [
-					{
-						id: 0,
-						rating: 1,
-						username: 'Test',
-						up_votes: 10,
-						down_votes: 4,
-						review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-					},
-					{
-						id: 1,
-						rating: 3,
-						username: 'Test',
-						up_votes: 15,
-						down_votes: 37,
-						review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-					},
-					{
-						id: 2,
-						rating: 2,
-						username: 'Test',
-						up_votes: 20,
-						down_votes: 2,
-						review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-					},
-					{
-						id: 2,
-						rating: 2,
-						username: 'Test',
-						up_votes: 20,
-						down_votes: 2,
-						review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-					},
+				reviews: this.state.reviews,
+				// [
+				// 	{
+				// 		id: 0,
+				// 		rating: 1,
+				// 		username: 'Test',
+				// 		up_votes: 10,
+				// 		down_votes: 4,
+				// 		review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+				// 	},
+				// 	{
+				// 		id: 1,
+				// 		rating: 3,
+				// 		username: 'Test',
+				// 		up_votes: 15,
+				// 		down_votes: 37,
+				// 		review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+				// 	},
+				// 	{
+				// 		id: 2,
+				// 		rating: 2,
+				// 		username: 'Test',
+				// 		up_votes: 20,
+				// 		down_votes: 2,
+				// 		review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+				// 	},
+				// 	{
+				// 		id: 3,
+				// 		rating: 2,
+				// 		username: 'Test',
+				// 		up_votes: 20,
+				// 		down_votes: 2,
+				// 		review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+				// 	},
 
-				],
+				// ],
+				title: this.state.markerTitle,
+				reviewableID: this.state.markerID,
+				username: this.props.username,
 				handleClick: this.closeModal.bind(this)
-			}; //call requestReviewableDataFromServer
+			}; 
 			return (<ReviewableModal {...props} />);
 		}
 	}
@@ -165,15 +173,22 @@ export class MapComponent extends React.Component {
 				marker = new google.maps.Marker({
 					position: {lat , lng },
 					map: map,
-					icon: mark['mark']
+					icon: mark['mark'], 
+					title: mark['title'],
+					reviewableID: mark['id']
 				});
 			} else {
 				marker = new google.maps.Marker({
 					position: {lat , lng },
-					map: map
+					map: map,
+					reviewableTitle: mark['title'],
+					reviewableID: mark['id']
 				});
 			}
-			google.maps.event.addListener(marker, 'click', this.markerClick.bind(this));
+			google.maps.event.addListener(marker, 'click', function() {
+				this.setState({markerClicked: true, activeMarker: 1, markerTitle: marker['reviewableTitle'], markerID: marker['reviewableID']});
+				jQuery('#reviewable-modal').toggleClass('active');
+			}.bind(this));
 			google.maps.event.addListener(marker, 'mouseover',  function() {
 				infowindow.open(map, marker);
 			}.bind(this));
@@ -185,13 +200,25 @@ export class MapComponent extends React.Component {
 		}
 	}
 
-	markerClick(){
-		this.setState({markerClicked: true, activeMarker: 1});
-		jQuery('#reviewable-modal').toggleClass('active');
-	}
-
 	closeModal(){
 		this.setState({markerClicked: false, activeMarker: -1});
 		jQuery('#reviewable-modal').toggleClass('active');
+	}
+
+	requestReviewsFromServer(){
+		let categories = {
+			reviewableID: this.state.activeMarker
+
+		}
+		let data = JSON.stringify( categories );
+		fetch('/getReviews', {
+			method: 'POST',
+			body: data
+		}).then(function(response: any){
+			response.json().then(function(result: any){
+				console.log(result);
+				this.setState({reviews: result['reviews']});
+			}.bind(this))
+		}.bind(this))
 	}
 }

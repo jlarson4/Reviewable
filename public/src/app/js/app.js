@@ -15,6 +15,7 @@ class App extends React.Component {
 		super();
 		this.state = {
 			logged_in: false,
+			username: ''
 		}
 	}
 
@@ -71,6 +72,7 @@ class App extends React.Component {
 				zoom: 17,
 				lat: 42.6218,
 				long: -87.821127,
+				username: this.state.username,
 				menuItems: ['Buildings', 'Classes', 'People']
 			};
 			return  (
@@ -87,28 +89,29 @@ class App extends React.Component {
 	}
 
 	requestReviewableDataFromServer(){
-		// let categories = {
-		// 	category: ['building', 'people', 'classes'],
-		// 	sub_category: [],
-		// 	title: [],
-		// 	school_id: 0
+		let categories = {
+			category: ['building', 'people', 'classes'],
+			sub_category: [],
+			title: [],
+			school_id: 0
 
-		// }
-		// let marker_info = null;
-		// let data = new FormData();
-		// data.append( "json", JSON.stringify( categories ) );
-		// fetch('/getpins', {
-		// 	method: 'POST',
-		// 	body: data
-		// }).then(function(response: any){
-		// 	response.json().then(function(result: any){
-		// 		console.log(result);
-		// 	}.bind(this))
-		// }.bind(this))
+		}
+		let marker_info = null;
+		let data = new FormData();
+		data.append( "json", JSON.stringify( categories ) );
+		fetch('/getpins', {
+			method: 'POST',
+			body: data
+		}).then(function(response: any){
+			response.json().then(function(result: any){
+				console.log(result);
+			}.bind(this))
+		}.bind(this))
 	}
 
-	setLoggedIn(val){
-		this.setState({logged_in: true});
+	setLoggedIn(val, user){
+		this.setState({logged_in: val});
+		this.setState({username: user});
 	}
 }
 

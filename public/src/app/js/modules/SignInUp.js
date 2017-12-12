@@ -102,8 +102,8 @@ export class SignInUp extends React.Component {
 
 	submitSignIn(){
 		let categories = {
-			username: [],
-			password: []
+			username: 'Test',
+			password: 'Test'
 		}
 		let data = JSON.stringify( categories );
 		fetch('./signIn', {
@@ -112,7 +112,7 @@ export class SignInUp extends React.Component {
 		}).then(function(response: any){
 			response.json().then(function(result: any){
 				if(result['signed_up']){
-					this.props.function_pointer()
+					this.props.function_pointer(true, 'Test');
 				}
 			}.bind(this))
 		}.bind(this))

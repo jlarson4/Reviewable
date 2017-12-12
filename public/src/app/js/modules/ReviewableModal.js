@@ -22,7 +22,7 @@ export class ReviewableModal extends React.Component {
 			<div id="reviewable-modal" className='modal'>
 				<div className="reviewable-content">
 					<div className="modalHeader">
-						<span className='modalHeadline'> David Straz Center </span>
+						<span className='modalHeadline'> {this.props.title} </span>
 						<div className='rating-stars'>
 							{this.getRatingsGraphic(this.state.averageRating, '')}
 						</div>
@@ -60,7 +60,7 @@ export class ReviewableModal extends React.Component {
 		if(this.state.createReview){
 			return (
 					<div className='modal-section'>
-						<textarea className='review-textarea' name='the-review' placeholder='Write a review...' rows='12'/>
+						<textarea id="reviewable-textarea-input" className='review-textarea' name='the-review' placeholder='Write a review...' rows='12'/>
 						<h1 className="reviews-header"> Rating: </h1>
 						<div className='new-review-rating-graphic'>
 							{this.getClickableRatingsGraphic(this.state.newRatingTemp, '')}
@@ -138,10 +138,38 @@ export class ReviewableModal extends React.Component {
 		return temp;
 	}
 	eventUpVote(event){
-		console.log(event.target.id)
+		let id = event.target.id.split('-')[1];
+		let categories = {
+			reviewID: id,
+			votetype: 1
+		}
+		let data = JSON.stringify( categories );
+		console.log(data);
+		fetch('./vote', {
+			method: 'POST',
+			body: data
+		}).then(function(response: any){
+			response.json().then(function(result: any){
+				console.log(result);
+			}.bind(this))
+		}.bind(this))
 	}
 	eventDownVote(event){
-		console.log(event.target.id)
+		let id = event.target.id.split('-')[1];
+		let categories = {
+			reviewID: id,
+			votetype: -1
+		}
+		let data = JSON.stringify( categories );
+		console.log(data);
+		fetch('./vote', {
+			method: 'POST',
+			body: data
+		}).then(function(response: any){
+			response.json().then(function(result: any){
+				console.log(result);
+			}.bind(this))
+		}.bind(this))
 	}
 	toggleReviewForm(){
 		this.setState({createReview: !this.state.createReview});
@@ -162,5 +190,24 @@ export class ReviewableModal extends React.Component {
 	}
 	submitReview(){
 		//review Submission AJAX goes here
+		// action /addReview
+		let val = document.getElementById('reviewable-textarea-input').value;
+		let categories = {
+			reviewableID: this.props.reviewableID,
+			review: val,
+			rating: this.state.newRating,
+			username: this.props.username
+		}
+		let data = JSON.stringify( categories );
+		fetch('./addReview', {
+			method: 'POST',
+			body: data
+		}).then(function(response: any){
+			response.json().then(function(result: any){
+				console.log(result);
+				this.setState({createReview: false})
+			}.bind(this))
+		}.bind(this))
+				this.setState({createReview: false})
 	}
 }

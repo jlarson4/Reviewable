@@ -236,7 +236,7 @@ input[type="text"].error{
 	margin-top: 10px;
 }
 .rating-stars{
-	width: 35%;
+	width: 25%;
 	display: inline-block;
 	vertical-align: top;
 	margin-top: 60px;
