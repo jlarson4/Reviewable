@@ -6,7 +6,6 @@ import { MapComponent } from './modules/MapComponent.js';
 import { GoogleMap } from './modules/GoogleMap.js';
 import { PracticeComp } from './modules/PracticeComp.js';
 import { SignInUp } from './modules/SignInUp.js';
-import { UserModal } from './modules/UserModal.js';
 
 const velocity = require('velocity-react');
 
@@ -80,7 +79,6 @@ class App extends React.Component {
 				<div>
 					<PracticeComp {...props}/> 
 					<MapComponent {...props}/>
-					{/*<UserModal {...props}/>*/}
 				</div>
 			);
 		}

@@ -486,8 +486,15 @@ span.error, p.error{
 	font-size: 24px;
 	padding: 10px 50px
 }
-
-
+.gear{
+	width: 30px;
+	height: 30px;
+	margin-bottom: 2px;
+}
+.profile-settings-div{
+	float:right;
+	padding-top: 10px;
+}
 
 
 ::-webkit-scrollbar {

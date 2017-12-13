@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import { UserModal } from './UserModal.js';
+
 const velocity = require('velocity-react');
 
 
@@ -7,7 +9,8 @@ export class PracticeComp extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			menuArrowArr:[]
+			menuArrowArr:[],
+			userModal: false
 		};
 		this.renderBuildingSubMenu = this.renderBuildingSubMenu.bind(this);
 		this.renderClassesSubMenu = this.renderClassesSubMenu.bind(this);
@@ -99,37 +102,55 @@ export class PracticeComp extends React.Component {
 	render() {
 		return (
 		<div className="mapMenu">
+			<velocity.VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
 				<div className="mapMenuSearchBar"><input type="text" name="search" placeholder="Search..." /></div>
 
-			<h2>
-				<label className="container" for='check1'>
-  				<input type="checkbox" name='check1' />
-  				<span className="checkmark"></span>
-					<span className="mapMenuText">{this.props.menuItems[0]}</span>
-				</label>
-				<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow" id={this.props.menuItems[0]} onClick={(event) => this.menuArrowClicked(event)} />
-			</h2>
-			{this.renderBuildingSubMenu()}
-			<h2>
-				<label className="container" for='check2'>
-  				<input type="checkbox" name='check2' />
-  				<span className="checkmark"></span>
-					<span className="mapMenuText">{this.props.menuItems[1]}</span>
-				</label>
-				<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow" id={this.props.menuItems[1]} onClick={(event) => this.menuArrowClicked(event)} />
-			</h2>
-			{this.renderClassesSubMenu()}
-			<h2>
-				<label className="container" for='check3'>
-  				<input type="checkbox" name='check3' />
-  				<span className="checkmark"></span>
-					<span className="mapMenuText">{this.props.menuItems[2]}</span>
-				</label>
-				<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow" id={this.props.menuItems[2]} onClick={(event) => this.menuArrowClicked(event)} />
-			</h2>
-			{this.renderPeopleSubMenu()}
-			<div className="mapMenuButton"><button> Make A Rating</button></div>
+				<h2>
+					<label className="container" for='check1'>
+	  				<input type="checkbox" name='check1' checked/>
+	  				<span className="checkmark"></span>
+						<span className="mapMenuText">{this.props.menuItems[0]}</span>
+					</label>
+					<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow" id={this.props.menuItems[0]} onClick={(event) => this.menuArrowClicked(event)} />
+				</h2>
+				{this.renderBuildingSubMenu()}
+				<h2>
+					<label className="container" for='check2'>
+	  				<input type="checkbox" name='check2' />
+	  				<span className="checkmark"></span>
+						<span className="mapMenuText">{this.props.menuItems[1]}</span>
+					</label>
+					<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow" id={this.props.menuItems[1]} onClick={(event) => this.menuArrowClicked(event)} />
+				</h2>
+				{this.renderClassesSubMenu()}
+				<h2>
+					<label className="container" for='check3'>
+	  				<input type="checkbox" name='check3' />
+	  				<span className="checkmark"></span>
+						<span className="mapMenuText">{this.props.menuItems[2]}</span>
+					</label>
+					<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow" id={this.props.menuItems[2]} onClick={(event) => this.menuArrowClicked(event)} />
+				</h2>
+				{this.renderPeopleSubMenu()}
+				<div className="mapMenuButton"><button> Make A Rating</button></div>
+				<div className='profile-settings-div' onClick={this.toggleUserModal.bind(this)}> <img className='gear' src="src/app/css/gear.png"/> <span> Profile Settings </span></div>
+				{this.renderModal()}
+			</velocity.VelocityTransitionGroup>
 		</div>
 		)
+	}
+
+	renderModal(){
+		if(this.state.userModal) {
+			let props = {
+				username: this.props.username,
+				handleClick: this.toggleUserModal.bind(this)
+			}
+			return (<UserModal {...props} />)
+		}
+	}
+
+	toggleUserModal(){
+		this.setState({userModal: !this.state.userModal})
 	}
 }
