@@ -36,6 +36,7 @@ export class SignInUp extends React.Component {
 					<input type='text' placeholder='Username' name='username' id='username'/>
 					<h3 className='logSubHeader'><label htmlFor='password'> Password </label></h3>
 					<input type='password' placeholder='Password' name='password' id='password'/>
+					<p className='error' id='signInError' width='100%'/>
 					<div className="submitButtons">
 						<a className='signup' onClick={this.signInToggle.bind(this)}> Sign Up </a>
 						<a className='login btn' onClick={this.submitSignIn.bind(this)}> Log In </a>
@@ -66,6 +67,7 @@ export class SignInUp extends React.Component {
 						<input type='text' placeholder='Last Name' name='lastname' id='ln'/>
 					</div>
 					<p className='desc'>*your name will not appear anywhere on site, we require a first and last name for security purposes only </p>
+					<div><span className="error" id='error-message'/></div>
 					<div className="submitButtons">
 						<a className='signup btn' onClick={this.submitSignUp.bind(this)}>Submit!</a>
 						<a className='cancel' onClick={this.signInToggle.bind(this)}>Cancel</a>
@@ -87,7 +89,7 @@ export class SignInUp extends React.Component {
 		let ln = document.getElementById('ln').value;
 		let e = document.getElementById('email').value;
 
-		if(p == p2){
+		if(p == p2 && p != ""){
 			let categories = {
 				username: u,
 				password: p,
@@ -110,7 +112,11 @@ export class SignInUp extends React.Component {
 		} else {
 			$('#password').addClass('error');
 			$('#cp').addClass('error');
-			$('.desc').append('<div><span class="error">Your two passwords did not match, retry</span></div>')
+			if(p == ""){
+				$('#error-message').text('You must input a password')
+			}else {
+				$('#error-message').text('Your two passwords did not match, retry')
+			}
 		}
 	}
 
@@ -129,6 +135,8 @@ export class SignInUp extends React.Component {
 			response.json().then(function(result: any){
 				if(result['signed_up']){
 					this.props.function_pointer(true, 'Test');
+				} else {
+					$('#signInError').text("Incorrect Username or Password, retry");
 				}
 			}.bind(this))
 		}.bind(this))
