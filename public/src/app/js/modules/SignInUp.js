@@ -8,7 +8,19 @@ export class SignInUp extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			signIn: true
+			signIn: true,
+			newSchool: false,
+			addBuildings: false,
+			contentMargin: 15,
+			username: '',
+			password: '',
+			email: '',
+			firstname: '',
+			lastname: '',
+			school_id: -1,
+			school_lat: -1,
+			school_long: -1,
+			buildings: []
 		}
 	}
 
@@ -16,11 +28,13 @@ export class SignInUp extends React.Component {
 		return (
 			<div className='signInBackground'>
 				<div className="signInFade">
-					<div className ='signInContent'>
+					<div className ='signInContent' style={{ marginTop: this.state.contentMargin + "%"}}>
 					<h1 className='logHeader'> Reviewable </h1>
 						<velocity.VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
 							{this.renderSignIn()}
 							{this.renderSignUp()}
+							{this.renderNewSchool()}
+							{this.renderAddBuildings()}
 						</velocity.VelocityTransitionGroup>
 					</div>
 				</div>
@@ -47,7 +61,7 @@ export class SignInUp extends React.Component {
 	}
 
 	renderSignUp(){
-		if(!this.state.signIn){
+		if(!this.state.signIn && !this.state.newSchool && !this.state.addBuildings){
 			return (
 				<div id='signupForm'>
 					<div className="span_6">
@@ -67,6 +81,12 @@ export class SignInUp extends React.Component {
 						<input type='text' placeholder='Last Name' name='lastname' id='ln'/>
 					</div>
 					<p className='desc'>*your name will not appear anywhere on site, we require a first and last name for security purposes only </p>
+					<div className='span_12'>
+						<h5 className='logSubHeader'><label htmlFor='email'> Select Your School </label></h5>
+						<select id='school-select'>
+							{this.renderSchoolOptions()}
+						</select>
+					</div>
 					<div><span className="error" id='error-message'/></div>
 					<div className="submitButtons">
 						<a className='signup btn' onClick={this.submitSignUp.bind(this)}>Submit!</a>
@@ -76,9 +96,139 @@ export class SignInUp extends React.Component {
 			);
 		}
 	}
+	renderSchoolOptions(){
+		let options = [];
+		options.push(<option value="">Select</option>);
+		let schools = [{school_name: 'Carthage College', school_id: 0}, {school_name: 'University of Chicago', school_id: 1}]; //getSchoolOptions()
+		for(let i = 0; i < schools.length; i++) {
+			options.push(<option value={schools[i]['school_id']} key={"school-" + schools[i]['school_id']}>{schools[i]['school_name']}</option>);
+		}
+		options.push(<option value="new">Add New School</option>);
+		return options;
+	}
+
+	renderNewSchool(){
+		if(this.state.newSchool) {
+			return ( 
+				<div id='newSchoolForm'>
+					<p className='desc'>Your school doesn't exist in our system yet! Please take a moment to set up your school.</p>
+					<h3 className='logSubHeader'><label htmlFor='schoolname'> School Name </label></h3>
+					<input type='text' placeholder='Name' name='schoolname' id='schoolname'/>
+					<h3 className='logSubHeader'><label htmlFor='lat'> Latitude </label></h3>
+					<input type='text' placeholder='Latitude' name='lat' id='lat'/>
+					<h3 className='logSubHeader'><label htmlFor='lng'> Longitude </label></h3>
+					<input type='text' placeholder='Longitude' name='lng' id='lng'/>
+					<a href='https://www.latlong.net/convert-address-to-lat-long.html' target='_blank'>Get Your Latitude and Longitude Here</a>
+					<div className="submitButtons">
+						<a className='addSchool btn' onClick={this.addSchool.bind(this)}>Add School</a>
+						<a className='cancel' onClick={this.cancelSchool.bind(this)}>Cancel</a>
+					</div>
+				</div>
+			);
+		}
+	}
+
+	renderAddBuildings(){
+		if(this.state.addBuildings) {
+			return(
+				<div id='newBuildingForm'>
+					<p className='desc'>
+						Now that we have located your school, please take a moment to add all significant buildings on our campus to assist us in making the most accurate review locations possible.
+					</p>
+					<velocity.VelocityTransitionGroup enter={{animation: "fadeIn", delay: "400"}} leave={{animation: "fadeOut"}}>
+						{this.renderBuildings()}
+					</velocity.VelocityTransitionGroup>
+					<h3 className='logSubHeader'><label htmlFor='buildingname'> Building Name </label></h3>
+					<input type='text' placeholder='Name' name='buildingname' id='buildingname'/>
+					<h3 className='logSubHeader'><label htmlFor='lat'> Latitude </label></h3>
+					<input type='text' placeholder='Latitude' name='lat' id='lat'/>
+					<h3 className='logSubHeader'><label htmlFor='lng'> Longitude </label></h3>
+					<input type='text' placeholder='Longitude' name='lng' id='lng'/>
+					<h3 className='logSubHeader'><label htmlFor='lng'> Number of Floors </label></h3>
+					<input type='number' min='1' placeholder='Number of Floors' name='Floors' id='floors'/>
+					<div className="submitButtons">
+						<a className='addBuilding btn' onClick={this.addBuilding.bind(this)}>Add Building</a>
+						<a className='finalizeBuildings btn' onClick={this.finalizeBuildings.bind(this)}>Finalize Buildings</a>
+					</div>
+					
+				</div>
+
+			);
+		}
+	}
+
+	renderBuildings(){
+		if(this.state.buildings.length == 0){
+			return(<h5>No Buildings Have Been Added</h5>);
+		} else {
+			let b = []
+			for(let i = 0; i < this.state.buildings.length; i++) {
+				b.push(
+					<div className='building-div' key={this.state.buidlings[i]['name']}>
+						<h6> {this.state.buidlings[i]['name']} 
+							<span className='building-delete-button' data-name={this.state.buidlings[i]['name']} onClick={(event) => this.deletBuilding(event)}>Delete</span>
+						</h6>
+					</div>
+				);
+			}
+			return b;
+		}
+	}
+
+	addSchool(){
+		//do ajax to add a school, then begin adding buildings
+
+		this.setState({addBuildings: true, newSchool: false});
+	}
+
+	cancelSchool(){
+		this.setState({newSchool: false, signIn: true, contentMargin: 15});
+	}
+
+	addBuilding(){
+		let temp = this.state.buildings;
+		let n = document.getElementById('buildingname').value;
+		let lat = document.getElementById('lat').value;
+		let lng = document.getElementById('lng').value;
+		let num = document.getElementById('floors').value;
+
+		temp.push({name: n, pos:lat + '-' + lng, noOfFloors: num});
+
+		this.setState({buidlings: temp});
+	}
+
+	finalizeBuildings(){
+		for(let i = 0; i < this.state.buildings.length; i++) {
+			//do an ajax call to the server for each building in the array		
+		}
+		//add new user now
+
+		//change states
+	}
+
+	deletBuilding(event){
+		let n = event.target.getAttribute('data-name');
+		let temp = [];
+		for(let i = 0; i < this.state.buildings.length; i++) {
+			//do an ajax call to the server for each building in the array
+			if(this.state.buildings[i]['name'] != n){
+				temp.push(this.state.buidlings[i]);
+			}
+		}
+		this.setState({buildings: temp});
+	}
+
+	getSchoolOptions(){
+		//do ajax call to get school options and return them to the previous function
+	}
 
 	signInToggle(){
-		this.setState({signIn: !this.state.signIn})
+		if(!this.state.signIn) {
+			this.setState({contentMargin: 15});
+		} else {
+			this.setState({contentMargin: 5});
+		}
+		this.setState({signIn: !this.state.signIn});
 	}
 
 	submitSignUp(){
@@ -88,35 +238,72 @@ export class SignInUp extends React.Component {
 		let fn = document.getElementById('fn').value;
 		let ln = document.getElementById('ln').value;
 		let e = document.getElementById('email').value;
+		let s = document.getElementById('school-select').value;
 
-		if(p == p2 && p != ""){
-			let categories = {
-				username: u,
-				password: p,
-				email: e,
-				firstName: fn,
-				lastName: ln
-			}
-			let data = JSON.stringify( categories );
-			console.log(data)
-			fetch('./signUp', {
-				method: 'POST',
-				body: data
-			}).then(function(response: any){
-				response.json().then(function(result: any){
-					if(result['signed_up']){
-						this.props.function_pointer(true, 'Test');
-					}
+		if(p == p2 && p != "" && fn != "" && ln != "" && u != "" && e != "" && s != ""){
+			if(s != 'new'){
+				let categories = {
+					username: u,
+					password: p,
+					email: e,
+					firstName: fn,
+					lastName: ln
+				}
+				let data = JSON.stringify( categories );
+				console.log(data)
+				fetch('./signUp', {
+					method: 'POST',
+					body: data
+				}).then(function(response: any){
+					response.json().then(function(result: any){
+						if(result['signed_up']){
+							this.props.function_pointer(true, 'Test');
+						}
+					}.bind(this))
 				}.bind(this))
-			}.bind(this))
-		} else {
-			$('#password').addClass('error');
-			$('#cp').addClass('error');
-			if(p == ""){
-				$('#error-message').text('You must input a password')
-			}else {
-				$('#error-message').text('Your two passwords did not match, retry')
+			} else {
+				this.setState({
+					username: u,
+					password: p,
+					email: e,
+					firstname: fn,
+					lastname: ln,
+					newSchool: true
+				})
 			}
+			
+		} else {
+			let errorText = '';
+			if(p == ""){
+				errorText += 'You must input a password<br/>';
+				$('#password').addClass('error');
+				$('#cp').addClass('error');
+			} else {
+				errorText += 'You two passwords did not match, retry<br/>';
+				$('#password').addClass('error');
+				$('#cp').addClass('error');
+			}
+			if (fn == "") {
+				errorText += 'You must input a first name<br/>';
+				$('#fn').addClass('error');
+			} 
+			if (ln == "") {
+				errorText += 'You must input a last name<br/>';
+				$('#ln').addClass('error');
+			} 
+			if (u == "") {
+				errorText += 'You must input a username<br/>';
+				$('#username').addClass('error');
+			}
+			if(e == "") {
+				errorText += 'You must input an email<br/>';
+				$('#email').addClass('error');
+			}
+			if (s == "") {
+				errorText += 'You must select a school<br/>';
+				$('#school-select').addClass('error');
+			}
+			$('#error-message').html(errorText);
 		}
 	}
 

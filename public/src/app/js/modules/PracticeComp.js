@@ -42,7 +42,7 @@ export class PracticeComp extends React.Component {
 		{
 			return(
 					<h3>
-						<label className="container2" for="XXXstring" >
+						<label className="container2" htmlFor="XXXstring" >
 		  				<input type="checkbox" name="XXXstring" />
 		  				<span className="checkmark"></span>
 							<span className="mapMenuText">DSC</span>
@@ -57,7 +57,7 @@ export class PracticeComp extends React.Component {
 	renderShit() {
 		return (
 			<h4>
-				<label className="container3" for="XXXstring" >
+				<label className="container3" htmlFor="XXXstring" >
 					<input type="checkbox" name="XXXstring" />
 					<span className="checkmark"></span>
 					<span className="mapMenuText">199</span>
@@ -72,7 +72,7 @@ export class PracticeComp extends React.Component {
 		{
 			return(
 					<h3>
-						<label className="container2" for="XXXstring" >
+						<label className="container2" htmlFor="XXXstring" >
 		  				<input type="checkbox" name="XXXstring" />
 		  				<span className="checkmark"></span>
 							<span className="mapMenuText">Boring Shit</span>
@@ -88,7 +88,7 @@ export class PracticeComp extends React.Component {
 		{
 			return(
 					<h3>
-						<label className="container2" for="XXXstring" >
+						<label className="container2" htmlFor="XXXstring" >
 		  				<input type="checkbox" name="XXXstring" />
 		  				<span className="checkmark"></span>
 							<span className="mapMenuText">That one fucking botch who i hate with a passion</span>
@@ -106,8 +106,8 @@ export class PracticeComp extends React.Component {
 				<div className="mapMenuSearchBar"><input type="text" name="search" placeholder="Search..." /></div>
 
 				<h2>
-					<label className="container" for='check1'>
-	  				<input type="checkbox" name='check1' checked/>
+					<label className="container" htmlFor='check1'>
+	  				<input type="checkbox" name='check1' defaultChecked='checked'/>
 	  				<span className="checkmark"></span>
 						<span className="mapMenuText">{this.props.menuItems[0]}</span>
 					</label>
@@ -115,7 +115,7 @@ export class PracticeComp extends React.Component {
 				</h2>
 				{this.renderBuildingSubMenu()}
 				<h2>
-					<label className="container" for='check2'>
+					<label className="container" htmlFor='check2'>
 	  				<input type="checkbox" name='check2' />
 	  				<span className="checkmark"></span>
 						<span className="mapMenuText">{this.props.menuItems[1]}</span>
@@ -124,7 +124,7 @@ export class PracticeComp extends React.Component {
 				</h2>
 				{this.renderClassesSubMenu()}
 				<h2>
-					<label className="container" for='check3'>
+					<label className="container" htmlFor='check3'>
 	  				<input type="checkbox" name='check3' />
 	  				<span className="checkmark"></span>
 						<span className="mapMenuText">{this.props.menuItems[2]}</span>

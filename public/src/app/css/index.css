@@ -68,6 +68,11 @@ body{
 	padding: 30px;
 	background-color: white;
 	border-radius: 10px;
+	-webkit-transition: margin .7s;
+	   -moz-transition: margin .7s;
+	    -ms-transition: margin .7s;
+	     -o-transition: margin .7s;
+	        transition: margin .7s;
 }
 
 button, .btn {
@@ -286,7 +291,7 @@ input {
 input:focus {outline:0;}
 button:focus {outline:0;}
 
-input[type="password"], input[type="text"], input[type="email"] {
+input[type="password"], input[type="text"], input[type="email"], input[type="number"] {
 	padding: 12px 10px;
 	font-size: 14px;
 	color: gray;
@@ -302,7 +307,7 @@ input[type="text"]:focus, input[type="password"]:focus{
 	-moz-box-shadow: 1px 1px 4px 1px rgb(1, 0, 0, .6);
 	box-shadow: 1px 1px 4px 1px rgb(1, 0, 0, .6);
 }
-input[type="password"].error{
+input[type="password"].error, input[type="text"].error{
 	border-color: #931919;
 }
 .logHeader{
@@ -495,6 +500,16 @@ span.error, p.error{
 	float:right;
 	padding-top: 10px;
 }
+#school-select{
+	width: 100%;
+}
+.building-delete-button{
+	float: right;
+	color: #931919;
+}
+
+
+
 
 
 ::-webkit-scrollbar {
@@ -533,7 +548,7 @@ textarea{
 }
 textarea:focus{
 	outline: none;
-	border-color: #931919;
+	border-color: blue;
 	-webkit-box-shadow: 1px 1px 4px 1px rgb(1, 0, 0, .6);
 	-moz-box-shadow: 1px 1px 4px 1px rgb(1, 0, 0, .6);
 	box-shadow: 1px 1px 4px 1px rgb(1, 0, 0, .6);
@@ -541,4 +556,38 @@ textarea:focus{
 .editing-textarea{
 	font-size: 14px;
 	width: 100%;
+}
+select{
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	-ms-box-sizing: content-box;
+	-moz-box-sizing: content-box;
+	-webkit-box-sizing: content-box; 
+	box-sizing: content-box;
+	max-width: 99.2%;
+	padding: 12px 0;
+	text-indent: 10px;
+	font-size: 14px;
+	margin-bottom: 5px;
+	background: url("closemenu.png") 96% center no-repeat white;
+	background-size: auto 8px;
+	border: 1px solid #bfbfbf;
+	border-radius: 10px;
+	color: #bfbfbf;
+	margin-top: 0;
+	overflow: '';
+}
+select::-ms-expand {
+	display: none;
+}
+select:focus{
+	outline: none;
+	border-color: blue;
+	-webkit-box-shadow: 1px 1px 4px 1px rgb(1, 0, 0, .6);
+	-moz-box-shadow: 1px 1px 4px 1px rgb(1, 0, 0, .6);
+	box-shadow: 1px 1px 4px 1px rgb(1, 0, 0, .6);
+}
+select.error{
+	border-color: #931919;
 }
