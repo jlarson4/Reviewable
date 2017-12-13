@@ -72,6 +72,10 @@ post '/getReviews' do
 
   payload = JSON.parse(request.body.read)
 
+puts payload
+  puts
+  puts
+
   reviewList = Array.new()
 
   Review.where(:reviewableID => payload['reviewableID']).each do |review|
@@ -93,6 +97,9 @@ post '/addReview' do
   puts "/addReview SUCESS"
 
   payload = JSON.parse(request.body.read)
+puts payload
+  puts
+  puts
 
   Review.create(:reviewableID => payload['reviewableID'], :reviewText => payload['review'], :rating => payload['rating'], :username => payload['username'])
 
@@ -108,6 +115,7 @@ post '/signUp' do
   payload = JSON.parse(request.body.read)
 
   if User.where(:username => payload['username']).empty? == true && User.where(:email => payload['email']).empty? == true
+
 
       User.create(:username => payload['username'], :password => payload['password'], :email => payload['email'], :firstName => payload['firstName'], :lastName => payload['lastName'])
 
@@ -131,6 +139,7 @@ post '/signIn' do
   #userTable = User.where(:username => payload['username'])
 
   if User.where(:username => payload['username']).empty? == false && User.where(:username => payload['username']).get(:password) == payload['password']
+
     retVal = true
     end
 

@@ -1,4 +1,6 @@
-
+body{
+	overflow: hidden;
+}
 #map{
 	width:100%;
 	height:100%;
@@ -14,7 +16,7 @@
 
 .modal{
 	position: fixed;
-	display: none;
+	display: block;
 	width: 100%;
 	height: 100%;
 	top: 0;
@@ -34,8 +36,8 @@
 	float:right;
 	background: url("closemodal.png") center center no-repeat;
 	background-size: cover;
-	width: 50px;
-	height: 50px;
+	width: 100px;
+	height: 100px;
 	margin-right: 25px;
 	margin-top: 10px;
 }
@@ -56,8 +58,6 @@
 	bottom: 0;
 	right: 0;
 	z-index: 10000;
-	background-color: rgba(1,1,1, .6);
-	background: rgba(1,1,1, .6);
 	overflow: hidden;
 }
 
@@ -70,16 +70,21 @@
 	border-radius: 10px;
 }
 
-button {
+button, .btn {
 	border-radius: 10px;
-	background-color: white;/*#CC261A; /* Carthage red */
-	border: 2px solid red;
-	color: red;
+	background-color: white;/*#CC261A; /* Carthage #931919 */
+	border: 2px solid #931919;
+	color: #931919;
 	padding: 5px 32px;
 	text-align: center;
 	text-decoration: none;
 	display: inline-block;
 	font-size: 16px;
+}
+.btn:hover{
+	border: 2px solid #52b265;
+	color: #52b265;
+
 }
 
 .mapMenuArrow{
@@ -190,10 +195,9 @@ input[type="text"]:focus, input[type="password"]:focus{
 	-moz-box-shadow: 1px 1px 4px 1px rgb(1, 0, 0, .6);
 	box-shadow: 1px 1px 4px 1px rgb(1, 0, 0, .6);
 }
-input[type="text"].error{
-	border-color: red;
+input[type="password"].error{
+	border-color: #931919;
 }
-
 .logHeader{
 	text-align: center;
 }
@@ -201,8 +205,8 @@ input[type="text"].error{
 	float: right;
 	background-color: rgba(230, 230, 230, .6);
 }
-.login:hover{
-	background-color: rgba(220, 220, 220, .6);
+.signup.btn{
+	background-color: rgba(230, 230, 230, .6);
 }
 .signup{
 	margin-left: 15px;
@@ -219,8 +223,207 @@ input[type="text"].error{
 .desc{
 	color: rgba(180, 180, 180, .6);
 }
+span.error{
+	color: #931919;
+}
 .signInBackground{
-	background-color: blue;
+	background: url('wallpaper.jpg') center center no-repeat;
+	background-size: cover;
 	width: 100%;
 	height: 100%;
+}
+.cancel{
+	float:right;
+	margin-right: 20px;
+	margin-top: 10px;
+}
+.cancel-edit{
+	border: none;
+	background: none;
+	margin-top: 10px;
+	color: blue;
+}
+.cancel-edit:hover{
+	text-decoration: underline;
+	border: none;
+	background: none;
+	color: blue;
+}
+
+.rating-stars{
+	width: 25%;
+	display: inline-block;
+	vertical-align: top;
+	margin-top: 60px;
+	margin-left: 60px;
+}
+.star{
+	background-size: cover;
+	display: inline-block;
+	width: 75px;
+	height: 50px;
+	padding-right: 25px;
+	vertical-align: middle;
+	top: 25px;
+}
+.mini-graphic{
+	width: 50px;
+	height: 25px;
+}
+.mini-rating{
+	float: right;
+}
+.modal-section{
+	height: 85%;
+	background-color: #efefef;
+	border-radius: 0 0 20px 20px;
+}
+.modalHeadline{
+	display: inline-block;
+	font-size: 75px;
+	margin-top: 25px;
+	margin-left: 25px;
+}
+.review-rating, .user-header {
+	padding-left: 20px;
+}
+.user-header{
+	color: #931919;
+}
+.green{
+	color: #5bc46f;
+}
+.red {
+	color: #931919;
+}
+.review-rating-option:hover{
+	color: #9d9e9d;
+	cursor: pointer;
+}
+.review-rating{
+	color: #bfbfbf;
+}
+.scrollable-review-div{
+	overflow: auto;
+}
+.reviews-header, .new-review-rating-graphic{
+	padding-left: 50px;
+}
+.new-review-rating-graphic{
+	width: 50%;
+	display: inline-block;
+}
+.modal-reviews{
+	height: 80%;
+	overflow: auto;
+}
+.modal-section{
+	overflow:hidden;
+}
+.span_8 {
+	width: 66.6%;
+	display: inline-block;
+	padding-left: 50px;
+	padding-right: 50px;
+}
+.span_4 {
+	width: 33.3%;
+	display: inline-block;
+}
+.review-textarea{
+	width: 92%;
+	height: 50%;
+	margin: 50px;
+}
+.new-rating-submit{
+	float: right;
+	margin-right: 50px;
+}
+.new-rating-submit .btn{
+	font-size: 45px;
+	padding: 10px 20px;
+	width: 100%;
+}
+.review-submit-option{
+	margin-top: 10px;
+}
+.user-single-review{
+	margin-bottom: 50px;
+}
+.user-review-editing{
+	margin-left: 50px;
+}
+.review-edit-option, .review-delete-option{
+	font-size: 24px;
+}
+.review-edit-option{
+	color: #bfbfbf;
+}
+.review-delete-option{
+	color: #931919;
+	margin-left: 20px;
+}
+.review-text{
+	font-size: 18px;
+}
+.modal-update-user{
+	vertical-align: top;
+	padding: 50px;
+}
+.user-update-button{
+	margin-top: 150px;
+	text-align: center;
+}
+.user-update-button .btn{
+	font-size: 24px;
+	padding: 10px 50px
+}
+
+
+
+
+::-webkit-scrollbar {
+    -webkit-appearance: none;
+}
+
+::-webkit-scrollbar:vertical {
+    width: 9px;
+}
+
+::-webkit-scrollbar:horizontal {
+    height: 11px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background-color: #aaaaaa;
+}
+
+::-webkit-scrollbar-track { 
+    background-color: #cccccc; 
+    border-radius: 8px; 
+}
+textarea{
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		appearance: none;
+		padding: 12px 10px;
+		font-size: 32px;
+		resize: none;
+		height: 160px;
+		color: #bfbfbf;
+		border: 1px solid #bfbfbf;
+		border-radius: 20px;
+		
+}
+textarea:focus{
+	outline: none;
+	border-color: #931919;
+	-webkit-box-shadow: 1px 1px 4px 1px rgb(1, 0, 0, .6);
+	-moz-box-shadow: 1px 1px 4px 1px rgb(1, 0, 0, .6);
+	box-shadow: 1px 1px 4px 1px rgb(1, 0, 0, .6);
+}
+.editing-textarea{
+	font-size: 14px;
+	width: 100%;
 }
