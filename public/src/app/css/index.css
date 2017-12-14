@@ -511,6 +511,7 @@ span.error, p.error{
 }
 .building-delete-button{
 	float: right;
+	padding-right: 15px;
 	color: #931919;
 }
 #reviewable-select{
@@ -544,6 +545,20 @@ span.error, p.error{
 .modal-make-review{
 	vertical-align: top;
 }
+.modal-new-scrolling{
+	margin-right: 20px;
+}
+.building-div{
+	height: 10%;
+	overflow: hidden;
+}
+.building-inner{
+	height: 100%;
+	overflow: auto;
+}
+
+
+
 
 
 

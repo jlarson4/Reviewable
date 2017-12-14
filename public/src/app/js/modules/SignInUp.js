@@ -115,9 +115,9 @@ export class SignInUp extends React.Component {
 					<h3 className='logSubHeader'><label htmlFor='schoolname'> School Name </label></h3>
 					<input type='text' placeholder='Name' name='schoolname' id='schoolname'/>
 					<h3 className='logSubHeader'><label htmlFor='lat'> Latitude </label></h3>
-					<input type='text' placeholder='Latitude' name='lat' id='lat'/>
+					<input type='number' placeholder='Latitude' name='lat' id='lat'/>
 					<h3 className='logSubHeader'><label htmlFor='lng'> Longitude </label></h3>
-					<input type='text' placeholder='Longitude' name='lng' id='lng'/>
+					<input type='number' placeholder='Longitude' name='lng' id='lng'/>
 					<a href='https://www.latlong.net/convert-address-to-lat-long.html' target='_blank'>Get Your Latitude and Longitude Here</a>
 					<div className="submitButtons">
 						<a className='addSchool btn' onClick={this.addSchool.bind(this)}>Add School</a>
@@ -135,15 +135,15 @@ export class SignInUp extends React.Component {
 					<p className='desc'>
 						Now that we have located your school, please take a moment to add all significant buildings on our campus to assist us in making the most accurate review locations possible.
 					</p>
-					<velocity.VelocityTransitionGroup enter={{animation: "fadeIn", delay: "400"}} leave={{animation: "fadeOut"}}>
+					<velocity.VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
 						{this.renderBuildings()}
 					</velocity.VelocityTransitionGroup>
 					<h3 className='logSubHeader'><label htmlFor='buildingname'> Building Name </label></h3>
 					<input type='text' placeholder='Name' name='buildingname' id='buildingname'/>
 					<h3 className='logSubHeader'><label htmlFor='lat'> Latitude </label></h3>
-					<input type='text' placeholder='Latitude' name='lat' id='lat'/>
+					<input type='number' placeholder='Latitude' name='lat' id='lat'/>
 					<h3 className='logSubHeader'><label htmlFor='lng'> Longitude </label></h3>
-					<input type='text' placeholder='Longitude' name='lng' id='lng'/>
+					<input type='number' placeholder='Longitude' name='lng' id='lng'/>
 					<h3 className='logSubHeader'><label htmlFor='lng'> Number of Floors </label></h3>
 					<input type='number' min='1' placeholder='Number of Floors' name='Floors' id='floors'/>
 					<div className="submitButtons">
@@ -159,20 +159,26 @@ export class SignInUp extends React.Component {
 
 	renderBuildings(){
 		if(this.state.buildings.length == 0){
-			return(<h5>No Buildings Have Been Added</h5>);
+			return(<h5 key="1">No Buildings Have Been Added</h5>);
 		} else {
 			console.log(this.state.buildings)
 			let b = []
 			for(let i = 0; i < this.state.buildings.length; i++) {
 				b.push(
-					<div className='building-div' key={this.state.buildings[i]['name']}>
-						<h6> {this.state.buildings[i]['name']} 
-							<span className='building-delete-button' data-name={this.state.buildings[i]['name']} onClick={(event) => this.deleteBuilding(event)}>Delete</span>
-						</h6>
-					</div>
+					<h6 key={this.state.buildings[i]['name']}> {this.state.buildings[i]['name']} 
+						<span className='building-delete-button' data-name={this.state.buildings[i]['name']} onClick={(event) => this.deleteBuilding(event)}>Delete</span>
+					</h6>
 				);
 			}
-			return b;
+			return (
+				<div className='building-div' key="2">
+					<div className='building-inner'>
+						<velocity.VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
+							{b}
+						</velocity.VelocityTransitionGroup>
+					</div>
+				</div>
+			);
 		}
 	}
 
