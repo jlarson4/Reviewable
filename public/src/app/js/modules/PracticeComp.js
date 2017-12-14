@@ -11,6 +11,7 @@ export class PracticeComp extends React.Component {
 		this.state = {
 			menuArrowArr:[],
 			userModal: false
+			reviewModal: false
 		};
 		this.renderBuildingSubMenu = this.renderBuildingSubMenu.bind(this);
 		this.renderClassesSubMenu = this.renderClassesSubMenu.bind(this);
@@ -132,7 +133,7 @@ export class PracticeComp extends React.Component {
 					<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow" id={this.props.menuItems[2]} onClick={(event) => this.menuArrowClicked(event)} />
 				</h2>
 				{this.renderPeopleSubMenu()}
-				<div className="mapMenuButton"><button> Make A Rating</button></div>
+				<div className="mapMenuButton"><button onClick={this.toggleNewReviewModal.bind(this)}> Make A Rating</button></div>
 				<div className='profile-settings-div' onClick={this.toggleUserModal.bind(this)}> <img className='gear' src="src/app/css/gear.png"/> <span> Profile Settings </span></div>
 				{this.renderModal()}
 			</velocity.VelocityTransitionGroup>
@@ -152,5 +153,8 @@ export class PracticeComp extends React.Component {
 
 	toggleUserModal(){
 		this.setState({userModal: !this.state.userModal})
+	}
+	toggleNewReviewModal(){
+		this.setState({reviewModal: !this.state.reviewModal})
 	}
 }

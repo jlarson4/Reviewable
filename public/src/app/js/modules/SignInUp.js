@@ -161,12 +161,13 @@ export class SignInUp extends React.Component {
 		if(this.state.buildings.length == 0){
 			return(<h5>No Buildings Have Been Added</h5>);
 		} else {
+			console.log(this.state.buildings)
 			let b = []
 			for(let i = 0; i < this.state.buildings.length; i++) {
 				b.push(
-					<div className='building-div' key={this.state.buidlings[i]['name']}>
-						<h6> {this.state.buidlings[i]['name']} 
-							<span className='building-delete-button' data-name={this.state.buidlings[i]['name']} onClick={(event) => this.deletBuilding(event)}>Delete</span>
+					<div className='building-div' key={this.state.buildings[i]['name']}>
+						<h6> {this.state.buildings[i]['name']} 
+							<span className='building-delete-button' data-name={this.state.buildings[i]['name']} onClick={(event) => this.deleteBuilding(event)}>Delete</span>
 						</h6>
 					</div>
 				);
@@ -186,15 +187,22 @@ export class SignInUp extends React.Component {
 	}
 
 	addBuilding(){
-		let temp = this.state.buildings;
 		let n = document.getElementById('buildingname').value;
+
+		for(let i = 0; i < this.state.buildings.length; i++) {
+			//do an ajax call to the server for each building in the array
+			if(this.state.buildings[i]['name'] == n){
+				return;
+			}
+		}
+		let temp = this.state.buildings;
 		let lat = document.getElementById('lat').value;
 		let lng = document.getElementById('lng').value;
 		let num = document.getElementById('floors').value;
-
+		
 		temp.push({name: n, pos:lat + '-' + lng, noOfFloors: num});
 
-		this.setState({buidlings: temp});
+		this.setState({buildings: temp});
 	}
 
 	finalizeBuildings(){
@@ -206,15 +214,17 @@ export class SignInUp extends React.Component {
 		//change states
 	}
 
-	deletBuilding(event){
+	deleteBuilding(event){
 		let n = event.target.getAttribute('data-name');
+		console.log(n);
 		let temp = [];
 		for(let i = 0; i < this.state.buildings.length; i++) {
 			//do an ajax call to the server for each building in the array
 			if(this.state.buildings[i]['name'] != n){
-				temp.push(this.state.buidlings[i]);
+				temp.push(this.state.buildings[i]);
 			}
 		}
+		console.log(temp)
 		this.setState({buildings: temp});
 	}
 
