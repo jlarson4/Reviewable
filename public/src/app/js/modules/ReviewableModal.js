@@ -29,7 +29,7 @@ export class ReviewableModal extends React.Component {
 						<a className="modal-close" onClick={this.props.handleClick}>
 						</a>
 					</div>
-					<velocity.VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
+					<velocity.VelocityTransitionGroup enter={{animation: "fadeIn", delay: "400"}} leave={{animation: "fadeOut"}}>
 						{this.renderReviewData()}
 						{this.renderReviewForm()}
 					</velocity.VelocityTransitionGroup>
@@ -125,6 +125,13 @@ export class ReviewableModal extends React.Component {
 				</div>
 			);
 
+		}
+		if(this.props.reviews.length == 0) {
+			reviews.push(
+				<div className='single-review' key={'review-' + 1}>
+					<h3 className='user-header'>No Reviews Available</h3>
+				</div>
+			);
 		}
 		return reviews;
 	}
