@@ -507,6 +507,10 @@ span.error, p.error{
 	float: right;
 	color: #931919;
 }
+#reviewable-select{
+	margin: 50px;
+	width: 80%;
+}
 
 
 

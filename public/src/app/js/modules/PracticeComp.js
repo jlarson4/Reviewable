@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { UserModal } from './UserModal.js';
+import { ReviewModal } from './ReviewModal.js';
 
 const velocity = require('velocity-react');
 
@@ -10,7 +11,7 @@ export class PracticeComp extends React.Component {
 		super(props)
 		this.state = {
 			menuArrowArr:[],
-			userModal: false
+			userModal: false,
 			reviewModal: false
 		};
 		this.renderBuildingSubMenu = this.renderBuildingSubMenu.bind(this);
@@ -148,6 +149,13 @@ export class PracticeComp extends React.Component {
 				handleClick: this.toggleUserModal.bind(this)
 			}
 			return (<UserModal {...props} />)
+		} else if(this.state.reviewModal) {
+			let props = {
+				username: this.props.username,
+				reviews: this.props.marker_info,
+				handleClick: this.toggleNewReviewModal.bind(this)
+			}
+			return (<ReviewModal {...props} />)
 		}
 	}
 
