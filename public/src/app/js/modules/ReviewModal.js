@@ -11,10 +11,14 @@ export class ReviewModal extends React.Component {
 		this.state = {
 			newReviewable: false,
 			createReview: false,
+			isBuilding: false,
+			isPerson: false,
+			newCategory: false,
 			reviewableID: -1,
 			reviewableTitle: '',
 			newRating: 1,
 			newRatingTemp: 1,
+			numFloors: 1
 		}
 
 		
@@ -52,7 +56,7 @@ export class ReviewModal extends React.Component {
 							{this.getClickableRatingsGraphic(this.state.newRatingTemp, '')}
 						</div>
 						<div className="new-rating-submit">
-							<a className='btn' onClick={this.submitReview.bind(this)}>Submit</a>
+							<a className='btn' onClick={this.toggleReviewForm.bind(this)}>Submit</a>
 							<a className='cancel new-rating-cancel' onClick={this.toggleReviewForm.bind(this)}>Cancel</a>
 						</div>
 					</div>
@@ -62,9 +66,6 @@ export class ReviewModal extends React.Component {
 	}
 	renderNewReviewable(){
 		//form for adding a reviewable. this needs to be made and then direct to review form
-		//needs reviewable name
-		//reviewable category 
-		//reviewable subcategory
 		//reviewable coordinates
 		//username
 		//school id
@@ -79,7 +80,30 @@ export class ReviewModal extends React.Component {
 						</a>
 					</div>
 					<div className='modal-section'>
-					
+						<div className='modal-new-scrolling'>
+							<div className='new-reviewable-modal-content'>
+								<h3 className='logSubHeader'><label htmlFor='name'> Reviewable Name </label></h3>
+								<input type='text' placeholder='Name' name='name' id='name'/>
+								
+								<h3 className='logSubHeader'><label htmlFor='category-select'> Select a Category </label></h3>
+								<select id='category-select' name='category-select' onChange={this.categoryChange.bind(this)}>
+									<option value=''>Select</option>
+									<option value='building'>Place</option>
+									<option value='class'>Class</option>
+									<option value='person'>Person</option>
+								</select>
+								<velocity.VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
+									{this.renderBuildingSelect()}
+									{this.renderPersonSelect()}
+								</velocity.VelocityTransitionGroup>
+								<h3 className='logSubHeader'><label htmlFor='lat'> Latitude </label></h3>
+								<input type='number' placeholder='Latitude' name='lat' id='lat'/>
+								<h3 className='logSubHeader'><label htmlFor='lng'> Longitude </label></h3>
+								<input type='number' placeholder='Longitude' name='lng' id='lng'/>
+								<a className='btn' onClick={this.submitNewReviewable.bind(this)}>Submit</a>
+								<a className='cancel new-rating-cancel' onClick={this.cancelNew.bind(this)}>Cancel</a>
+							</div>
+						</div>
 					</div>
 				</div>
 			);
@@ -89,12 +113,12 @@ export class ReviewModal extends React.Component {
 	renderSelectOptions(){
 		if(!this.state.newReviewable && !this.state.createReview){
 			let options = [];
-			options.push(<option value="">Select</option>);
+			options.push(<option value="" key={"buidling-" + -1}>Select</option>);
 			let reviewables = [{name: 'David Straz Center', reviewableID: 0}, {name: 'Lentz Hall', reviewableID: 1}]; //getSchoolOptions()
 			for(let i = 0; i < reviewables.length; i++) {
 				options.push(<option value={reviewables[i]['name'] + "-" + reviewables[i]['reviewableID']} key={"school-" + reviewables[i]['reviewableID']}>{reviewables[i]['name']}</option>);
 			}
-			options.push(<option value="new">Add New Reviewable</option>);
+			options.push(<option value="new" key={"buidling-" + -2}>Add New Reviewable</option>);
 			return (
 				<div>
 					<div className="modalHeader">
@@ -113,7 +137,60 @@ export class ReviewModal extends React.Component {
 				</div>
 			);
 		}
+	}
 
+	renderBuildingSelect(){
+		if(this.state.isBuilding){
+			let options = [];
+			options.push(<option value="" key={"buidling-" + -1}>Select</option>);
+			let reviewables = [{building_name: 'David Straz Center', buidling_id: 0, noOfFloors: 1}, {building_name: 'Lentz Hall', buidling_id: 1, noOfFloors: 3}]; //getSchoolOptions()
+			for(let i = 0; i < reviewables.length; i++) {
+				options.push(<option value={reviewables[i]['building_name'] + "-" + reviewables[i]['noOfFloors']} key={i + reviewables[i]['noOfFloors']}>{reviewables[i]['building_name']}</option>);
+			}
+			return (
+				<div>
+					<h3 className='logSubHeader'><label htmlFor='building-select'> Select The Building </label></h3>
+					<select id='building-select' name='building-select' onChange={this.placeChange.bind(this)}>
+						{options}
+					</select>
+
+					<h3 className='logSubHeader'><label htmlFor='floor-number'> Floor Number </label></h3>
+					<input type='number' placeholder='Floor Number' min='1' max={this.state.numFloors} name='floor-number' id='floor-number'/>
+				</div>
+			);
+		}
+	}
+
+	renderPersonSelect(){
+		if(this.state.isPerson){
+			let options = [];
+			options.push(<option value="" key={"buidling-" + -1}>Select</option>);
+			let types = ['Administrator', 'Barista']; //getPersonOptions()
+			for(let i = 0; i < types.length; i++) {
+				options.push(<option value={types[i]} key={"buidling-" + i}>{types[i]}</option>);
+			}
+			options.push(<option value="new" key={"buidling-" + -2}>Add New Person Type</option>);
+			return (
+				<div>
+					<h3 className='logSubHeader'><label htmlFor='person-select'> Select a Role </label></h3>
+					<select id='person-select' onChange={this.personChange.bind(this)}>
+						{options}
+					</select>
+					{this.renderNewPersonCategory()}
+				</div>
+			);
+		}
+	}
+
+	renderNewPersonCategory(){
+		if(this.state.newCategory) {
+			return (
+				<div>
+					<h3 className='logSubHeader'><label htmlFor='category'> New Role </label></h3>
+					<input type='text' placeholder='Category' name='category' id='category'/>
+				</div>
+			);
+		}
 	}
 
 	getClickableRatingsGraphic(r, c){
@@ -127,11 +204,37 @@ export class ReviewModal extends React.Component {
 		}
 		return graphic;
 	}
+
 	toggleReviewForm(){
 		this.setState({createReview: !this.state.createReview});
 		this.setState({newRating: this.state.averageRating})
 		this.setState({newRatingTemp: this.state.averageRating})
 	}
+
+	placeChange(){
+		let val = document.getElementById('building-select').value.split('-')[1];
+		console.log(val)
+		this.setState({numFloors: val})
+	}
+
+	personChange(){
+		let val = document.getElementById('person-select').value;
+		if(val == 'new') {
+			this.setState({newCategory: true})
+		}
+	}
+	categoryChange(){
+		let val = document.getElementById('category-select').value;
+		if(val == 'building'){
+			this.setState({isBuilding: true, isPerson: false});
+		} else if (val == 'person') {
+			this.setState({isPerson: true, isBuilding: false});
+		} else {
+			this.setState({isPerson: false, isBuilding: false});
+		}
+		
+	}
+
 	submitReview(){
 		//review Submission AJAX goes here
 		// action /addReview
@@ -174,5 +277,14 @@ export class ReviewModal extends React.Component {
 			let name = val.split("-")[0];
 			this.setState({createReview: true, reviewableID: id, reviewableTitle: name});
 		}
+	}
+	cancelNew(){
+		this.setState({newReviewable: false})
+	}
+	submitNewReviewable(){
+		let t = document.getElementById('name').value;
+		//sends in the new reviewable and loads review form for that reviewable
+		this.setState({newReviewable: false, reviewableID: 0, reviewableTitle: t});
+		this.setState({createReview: true});
 	}
 }

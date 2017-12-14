@@ -426,8 +426,9 @@ span.error, p.error{
 	width: 50%;
 	display: inline-block;
 }
-.modal-reviews{
-	height: 80%;
+.modal-reviews, .modal-new-scrolling{
+	margin-top: 2%;
+	height: 90%;
 	overflow: auto;
 }
 .modal-section{
@@ -511,8 +512,20 @@ span.error, p.error{
 	margin: 50px;
 	width: 80%;
 }
+.new-reviewable-modal-content{
+	padding: 50px;
+	overflow: auto;
+}
+.new-reviewable-modal-content select{
+	width:50%;
+}
 
-
+.new-reviewable-modal-content .btn{
+	margin-top: 25px; 
+}
+.new-reviewable-modal-content .cancel{
+	margin-top: 35px; 
+}
 
 
 
