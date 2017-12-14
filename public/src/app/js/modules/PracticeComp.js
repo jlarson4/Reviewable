@@ -10,7 +10,7 @@ export class PracticeComp extends React.Component {
 		super(props)
 		this.state = {
 			menuArrowArr:[],
-			userModal: false
+			userModal: false,
 			reviewModal: false
 		};
 		this.renderBuildingSubMenu = this.renderBuildingSubMenu.bind(this);
@@ -42,11 +42,11 @@ export class PracticeComp extends React.Component {
 		if (this.state.menuArrowArr.includes("Buildings"))
 		{
 			return(
-					<h3>
-						<label className="container2" htmlFor="XXXstring" >
-		  				<input type="checkbox" name="XXXstring" />
+					<h3 className="menuItem2">
+						<label className="container2" for="XXXstring" >
+		  				<input type="checkbox" name="XXXstring" defaultChecked="checked" />
 		  				<span className="checkmark"></span>
-							<span className="mapMenuText">DSC</span>
+							<span className="mapMenuText2">DSC</span>
 						</label>
 						<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow2" id="DSC" onClick={(event) => this.menuArrowClicked(event)} />
 						{this.renderShit()}
@@ -58,13 +58,27 @@ export class PracticeComp extends React.Component {
 	renderShit() {
 		return (
 			<h4>
-				<label className="container3" htmlFor="XXXstring" >
-					<input type="checkbox" name="XXXstring" />
+				<label className="container3" for="XXXstring" >
+					<input type="checkbox" name="XXXstring" defaultChecked="checked" />
 					<span className="checkmark"></span>
-					<span className="mapMenuText">199</span>
+					<span className="mapMenuText3">Floor 1</span>
 				</label>
-				<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow3" id="199" onClick={(event) => this.menuArrowClicked(event)} />
+				<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow3" id="Floor 1" onClick={(event) => this.menuArrowClicked(event)} />
+				{this.renderMoreShit()}
 			</h4>
+		)
+	}
+
+	renderMoreShit() {
+		return (
+			<h5>
+				<label className="container4" for="XXXstring" >
+					<input type="checkbox" name="XXXstring" defaultChecked="checked" />
+					<span className="checkmark"></span>
+					<span className="mapMenuText4">DSC 199</span>
+				</label>
+				<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow4" id="DSC 199" onClick={(event) => this.menuArrowClicked(event)} />
+			</h5>
 		)
 	}
 
@@ -72,11 +86,11 @@ export class PracticeComp extends React.Component {
 		if (this.state.menuArrowArr.includes("Classes"))
 		{
 			return(
-					<h3>
-						<label className="container2" htmlFor="XXXstring" >
-		  				<input type="checkbox" name="XXXstring" />
+					<h3 className="menuItem2">
+						<label className="container2" for="XXXstring" >
+		  				<input type="checkbox" name="XXXstring" defaultChecked="checked" />
 		  				<span className="checkmark"></span>
-							<span className="mapMenuText">Boring Shit</span>
+							<span className="mapMenuText2">Boring Shit</span>
 						</label>
 						<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow2" id="Boring Shit" onClick={(event) => this.menuArrowClicked(event)} />
 					</h3>
@@ -88,11 +102,11 @@ export class PracticeComp extends React.Component {
 		if (this.state.menuArrowArr.includes("People"))
 		{
 			return(
-					<h3>
-						<label className="container2" htmlFor="XXXstring" >
-		  				<input type="checkbox" name="XXXstring" />
+					<h3 className="menuItem2">
+						<label className="container2" for="XXXstring" >
+		  				<input type="checkbox" name="XXXstring" defaultChecked="checked" />
 		  				<span className="checkmark"></span>
-							<span className="mapMenuText">That one fucking botch who i hate with a passion</span>
+							<span className="mapMenuText2">That one fucking botch who i hate with a passion</span>
 						</label>
 						<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow2" id="Logan" onClick={(event) => this.menuArrowClicked(event)} />
 					</h3>
@@ -106,34 +120,34 @@ export class PracticeComp extends React.Component {
 			<velocity.VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
 				<div className="mapMenuSearchBar"><input type="text" name="search" placeholder="Search..." /></div>
 
-				<h2>
-					<label className="container" htmlFor='check1'>
-	  				<input type="checkbox" name='check1' defaultChecked='checked'/>
+				<h2 className="menuItem">
+					<label className="container" for='check1'>
+	  				<input type="checkbox" name='check1' defaultChecked="checked" />
 	  				<span className="checkmark"></span>
 						<span className="mapMenuText">{this.props.menuItems[0]}</span>
 					</label>
 					<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow" id={this.props.menuItems[0]} onClick={(event) => this.menuArrowClicked(event)} />
 				</h2>
 				{this.renderBuildingSubMenu()}
-				<h2>
-					<label className="container" htmlFor='check2'>
-	  				<input type="checkbox" name='check2' />
+				<h2  className="menuItem">
+					<label className="container" for='check2'>
+	  				<input type="checkbox" name='check2' defaultChecked="checked" />
 	  				<span className="checkmark"></span>
 						<span className="mapMenuText">{this.props.menuItems[1]}</span>
 					</label>
 					<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow" id={this.props.menuItems[1]} onClick={(event) => this.menuArrowClicked(event)} />
 				</h2>
 				{this.renderClassesSubMenu()}
-				<h2>
-					<label className="container" htmlFor='check3'>
-	  				<input type="checkbox" name='check3' />
+				<h2  className="menuItem">
+					<label className="container" for='check3'>
+	  				<input type="checkbox" name='check3' defaultChecked="checked" />
 	  				<span className="checkmark"></span>
 						<span className="mapMenuText">{this.props.menuItems[2]}</span>
 					</label>
 					<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow" id={this.props.menuItems[2]} onClick={(event) => this.menuArrowClicked(event)} />
 				</h2>
 				{this.renderPeopleSubMenu()}
-				<div className="mapMenuButton"><button onClick={this.toggleNewReviewModal.bind(this)}> Make A Rating</button></div>
+				<div className="mapMenuButton"><button onClick={this.toggleNewReviewModal.bind(this)}> Make A Review</button></div>
 				<div className='profile-settings-div' onClick={this.toggleUserModal.bind(this)}> <img className='gear' src="src/app/css/gear.png"/> <span> Profile Settings </span></div>
 				{this.renderModal()}
 			</velocity.VelocityTransitionGroup>
