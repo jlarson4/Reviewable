@@ -18,7 +18,10 @@ export class ReviewModal extends React.Component {
 			reviewableTitle: '',
 			newRating: 1,
 			newRatingTemp: 1,
-			numFloors: 1
+			numFloors: 1,
+			height: 25,
+			width: 30,
+			margin: 35
 		}
 
 		
@@ -28,7 +31,7 @@ export class ReviewModal extends React.Component {
 		
 		return  (
 			<div id="reviewable-modal" className='modal'>
-				<div className="reviewable-content">
+				<div className="reviewable-content" style={{height: this.state.height + "%", width: this.state.width + "%", marginLeft: this.state.margin + "%"}}>
 					<velocity.VelocityTransitionGroup enter={{animation: "fadeIn", delay: "400"}} leave={{animation: "fadeOut"}}>
 						{this.renderSelectOptions()}
 						{this.renderReviewForm()}
@@ -65,10 +68,6 @@ export class ReviewModal extends React.Component {
 		}
 	}
 	renderNewReviewable(){
-		//form for adding a reviewable. this needs to be made and then direct to review form
-		//reviewable coordinates
-		//username
-		//school id
 		if(this.state.newReviewable) {
 			return (
 				<div>
@@ -114,25 +113,25 @@ export class ReviewModal extends React.Component {
 		if(!this.state.newReviewable && !this.state.createReview){
 			let options = [];
 			options.push(<option value="" key={"buidling-" + -1}>Select</option>);
-			let reviewables = [{name: 'David Straz Center', reviewableID: 0}, {name: 'Lentz Hall', reviewableID: 1}]; //getSchoolOptions()
+			let reviewables = this.props.reviews;
 			for(let i = 0; i < reviewables.length; i++) {
-				options.push(<option value={reviewables[i]['name'] + "-" + reviewables[i]['reviewableID']} key={"school-" + reviewables[i]['reviewableID']}>{reviewables[i]['name']}</option>);
+				options.push(<option value={reviewables[i]['title'] + "-" + reviewables[i]['id']} key={"school-" + reviewables[i]['id']}>{reviewables[i]['title']}</option>);
 			}
 			options.push(<option value="new" key={"buidling-" + -2}>Add New Reviewable</option>);
 			return (
 				<div>
 					<div className="modalHeader">
-						<span className='modalHeadline'>
+						<span className='modalHeadline make-a-rating'>
 							Select Your Reviewable
 						</span>
-						<a className="modal-close" onClick={this.props.handleClick}>
+						<a className="modal-close make-a-rating-close" onClick={this.props.handleClick}>
 						</a>
 					</div>
 					<div className='modal-section'>
 						<select id='reviewable-select'>
 							{options}
 						</select>
-						<a className='btn' onClick={this.submitSelect.bind(this)}>Submit</a>
+						<a className='btn reviewable-select' onClick={this.submitSelect.bind(this)}>Submit</a>
 					</div>
 				</div>
 			);
@@ -143,7 +142,7 @@ export class ReviewModal extends React.Component {
 		if(this.state.isBuilding){
 			let options = [];
 			options.push(<option value="" key={"buidling-" + -1}>Select</option>);
-			let reviewables = [{building_name: 'David Straz Center', buidling_id: 0, noOfFloors: 1}, {building_name: 'Lentz Hall', buidling_id: 1, noOfFloors: 3}]; //getSchoolOptions()
+			let reviewables = this.getBuildingOptions()
 			for(let i = 0; i < reviewables.length; i++) {
 				options.push(<option value={reviewables[i]['building_name'] + "-" + reviewables[i]['noOfFloors']} key={i + reviewables[i]['noOfFloors']}>{reviewables[i]['building_name']}</option>);
 			}
@@ -165,7 +164,7 @@ export class ReviewModal extends React.Component {
 		if(this.state.isPerson){
 			let options = [];
 			options.push(<option value="" key={"buidling-" + -1}>Select</option>);
-			let types = ['Administrator', 'Barista']; //getPersonOptions()
+			let types = this.getRoleOptions();
 			for(let i = 0; i < types.length; i++) {
 				options.push(<option value={types[i]} key={"buidling-" + i}>{types[i]}</option>);
 			}
@@ -176,7 +175,9 @@ export class ReviewModal extends React.Component {
 					<select id='person-select' onChange={this.personChange.bind(this)}>
 						{options}
 					</select>
-					{this.renderNewPersonCategory()}
+					<velocity.VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
+						{this.renderNewPersonCategory()}
+					</velocity.VelocityTransitionGroup>
 				</div>
 			);
 		}
@@ -206,6 +207,11 @@ export class ReviewModal extends React.Component {
 	}
 
 	toggleReviewForm(){
+		if(this.state.createReview == true) {
+			this.setState({height: 25,
+				width: 30,
+				margin: 35});
+		}
 		this.setState({createReview: !this.state.createReview});
 		this.setState({newRating: this.state.averageRating})
 		this.setState({newRatingTemp: this.state.averageRating})
@@ -221,6 +227,8 @@ export class ReviewModal extends React.Component {
 		let val = document.getElementById('person-select').value;
 		if(val == 'new') {
 			this.setState({newCategory: true})
+		} else {
+			this.setState({newCategory: false})
 		}
 	}
 	categoryChange(){
@@ -234,7 +242,40 @@ export class ReviewModal extends React.Component {
 		}
 		
 	}
-
+	cancelNew(){
+		this.setState({newReviewable: false, height: 25,
+			width: 30,
+			margin: 35})
+	}
+	
+	setNewReviewRating(event){
+		let newRate = parseInt(event.target.getAttribute('data-rating'));
+		this.setState({newRating: newRate})
+		this.setState({newRatingTemp: newRate})
+	}
+	setNewTempReviewRating(event){
+		let newRate = parseInt(event.target.getAttribute('data-rating'));
+		this.setState({newRatingTemp: newRate})
+	}
+	resetNewReviewRating(){
+		this.setState({newRatingTemp: this.state.newRating})
+	}
+	submitSelect(){
+		let val = document.getElementById('reviewable-select').value;
+		if(val == 'new') {
+			this.setState({newReviewable: true, height: 80, width: 80, margin: 10})
+		} else if(val != "") {
+			let id = val.split("-")[1];
+			let name = val.split("-")[0];
+			this.setState({createReview: true, reviewableID: id, reviewableTitle: name, height: 80, width: 80, margin: 10});
+		}
+	}
+	submitNewReviewable(){
+		let t = document.getElementById('name').value;
+		//sends in the new reviewable and loads review form for that reviewable
+		this.setState({newReviewable: false, reviewableID: 0, reviewableTitle: t});
+		this.setState({createReview: true});
+	}
 	submitReview(){
 		//review Submission AJAX goes here
 		// action /addReview
@@ -256,35 +297,15 @@ export class ReviewModal extends React.Component {
 		}.bind(this))
 		this.setState({createReview: false})
 	}
-	setNewReviewRating(event){
-		let newRate = parseInt(event.target.getAttribute('data-rating'));
-		this.setState({newRating: newRate})
-		this.setState({newRatingTemp: newRate})
+	
+	getBuildingOptions(){
+		//request school options from the server
+		console.log("Building Options Request Here");
+		return [{building_name: 'David A. Straz, Jr. Center', buidling_id: 0, noOfFloors: 1}, {building_name: 'Lentz Hall', buidling_id: 1, noOfFloors: 3}];
 	}
-	setNewTempReviewRating(event){
-		let newRate = parseInt(event.target.getAttribute('data-rating'));
-		this.setState({newRatingTemp: newRate})
-	}
-	resetNewReviewRating(){
-		this.setState({newRatingTemp: this.state.newRating})
-	}
-	submitSelect(){
-		let val = document.getElementById('reviewable-select').value;
-		if(val == 'new') {
-			this.setState({newReviewable: true})
-		} else if(val != "") {
-			let id = val.split("-")[1];
-			let name = val.split("-")[0];
-			this.setState({createReview: true, reviewableID: id, reviewableTitle: name});
-		}
-	}
-	cancelNew(){
-		this.setState({newReviewable: false})
-	}
-	submitNewReviewable(){
-		let t = document.getElementById('name').value;
-		//sends in the new reviewable and loads review form for that reviewable
-		this.setState({newReviewable: false, reviewableID: 0, reviewableTitle: t});
-		this.setState({createReview: true});
+	getRoleOptions(){
+		//request role options from server
+		console.log("Role Options Request Here");
+		return ['Barista', 'Admin'];
 	}
 }

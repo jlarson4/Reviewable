@@ -44,7 +44,7 @@ export class MapComponent extends React.Component {
 				<div id='map'>
 
 				</div>
-				<velocity.VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
+				<velocity.VelocityTransitionGroup enter={{animation: "fadeIn"}} leave={{animation: "fadeOut"}}>
 					{this.renderModal()}
 				</velocity.VelocityTransitionGroup>
 			</div>

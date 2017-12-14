@@ -47,6 +47,11 @@ body{
 	margin: 5% auto 0 auto;
 	background-color: white;
 	border-radius: 20px;
+	-webkit-transition: height .7s, width .7s, margin-left .7s;
+	   -moz-transition: height .7s, width .7s, margin-left .7s;
+	    -ms-transition: height .7s, width .7s, margin-left .7s;
+	     -o-transition: height .7s, width .7s, margin-left .7s;
+	        transition: height .7s, width .7s, margin-left .7s;
 }
 .signInFade{
 	position: fixed;
@@ -526,6 +531,20 @@ span.error, p.error{
 .new-reviewable-modal-content .cancel{
 	margin-top: 35px; 
 }
+.make-a-rating{
+	font-size: 36px;
+}
+.make-a-rating-close{
+	height: 40px;
+	width: 40px;
+}
+.reviewable-select{
+	margin-left: 50px;
+}
+.modal-make-review{
+	vertical-align: top;
+}
+
 
 
 
