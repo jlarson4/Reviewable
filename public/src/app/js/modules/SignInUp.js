@@ -234,9 +234,42 @@ export class SignInUp extends React.Component {
 
 	finalizeBuildings(){
 		for(let i = 0; i < this.state.buildings.length; i++) {
-			//do an ajax call to the server for each building in the array		
+			//do an ajax call to the server for each building in the array
+			let categories = {
+				schoolID: this.props.school_id,
+				name: this.state.buildings[i]['name'],
+				noOfFloors: this.state.buildings[i]['noOfFloors'],
+				coordinates: this.state.buildings[i]['pos']
+			}
+			let data = JSON.stringify( categories );
+			fetch('./addBuilding', {
+				method: 'POST',
+				body: data
+			}).then(function(response: any){
+				response.json().then(function(result: any){
+					console.log(result)
+				}.bind(this))
+			}.bind(this))	
 		}
 		//add new user now
+		let categories = {
+			username: this.state.username,
+			password: this.state.password,
+			email: this.state.email,
+			firstName: this.state.firstname,
+			lastName: this.state.lastname
+		}
+		let data = JSON.stringify( categories );
+		fetch('./signUp', {
+			method: 'POST',
+			body: data
+		}).then(function(response: any){
+			response.json().then(function(result: any){
+				if(result['signed_up']){
+					this.props.function_pointer(true, 'Test');
+				}
+			}.bind(this))
+		}.bind(this))
 
 		//change states
 	}

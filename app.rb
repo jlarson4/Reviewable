@@ -281,6 +281,7 @@ post '/addBuilding' do
   puts "/addBuilding SUCCESS"
 
   payload = JSON.parse(request.body.read)
+  puts payload
   
   building = Building.create(:schoolID => payload['schoolID'], :name => payload['name'], :noOfFloors => payload['noOfFloors'], :coordinates => payload['coordinates'])
 
@@ -315,7 +316,7 @@ post '/getpins' do
   puts "/getpins SUCESS"
 
   payload = JSON.parse(request.body.read)
-  
+
   puts payload
 
   returnVal = Array.new
