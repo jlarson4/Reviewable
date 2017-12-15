@@ -18,7 +18,7 @@ class Reviewable < Sinatra::Base
                 String :firstName
                 String :lastName
                 String :email, :unique=>TRUE
-                String :homeSchool
+                Int :schoolID
                 String :admin             
               end
 
@@ -192,7 +192,7 @@ post '/signUp' do
   if User.where(:username => payload['username']).empty? == true && User.where(:email => payload['email']).empty? == true
 
 
-      User.create(:username => payload['username'], :password => payload['password'], :email => payload['email'], :firstName => payload['firstName'], :lastName => payload['lastName'])
+      User.create(:username => payload['username'], :password => payload['password'], :email => payload['email'], :firstName => payload['firstName'], :lastName => payload['lastName'], :schoolID => payload['schoolId'])
 
       retVal = true
   end
