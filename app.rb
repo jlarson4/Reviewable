@@ -72,7 +72,7 @@ post '/addReviewable' do
 
   payload = JSON.parse(request.body.read)
 
-  reviewable = Reviewobject.create(:reviewableName => payload['Reviewable_name'], :coordinates => payload['latLong'])
+  reviewable = Reviewobject.create(:reviewableName => payload['Reviewable_name'], :coordinates => payload['latLong'], :username => payload['username'], :category => payload['category'], :subCategory => payload['subCategory'], :reviewableDescription => payload['reviewableDescription'])
 
   content_type :json
   { reviewableID: reviewable.reviewablesID }.to_json
@@ -327,7 +327,6 @@ post '/getSingleSchool' do
   { schoolCoordinates: school.schoolCoordinates }.to_json
 
 end
-
 
 #--------------------------------------------------------------- Get Pins
 post '/getpins' do
