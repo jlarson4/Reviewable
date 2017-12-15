@@ -66,21 +66,34 @@ class Reviewable < Sinatra::Base
 
   end
 
+#--------------------------------------------------------------- ReviewObject
+post '/addReviewable' do
+  puts "/addReviewable SUCCESS"
+
+  payload = JSON.parse(request.body.read)
+
+  reviewable = Reviewobject.create(:reviewableName => payload['Reviewable_name'], :coordinates => payload['latLong'])
+
+  content_type :json
+  { reviewableID: reviewable.reviewablesID }.to_json
+end
+
+#--------------------------------------------------------------- Reviews
 post '/getReviews' do
 
   puts "/getReviews SUCCESS"
 
   payload = JSON.parse(request.body.read)
 
-puts payload
+  puts payload
   puts
   puts
 
   reviewList = Array.new()
 
-  Review.where(:reviewableID => payload['reviewableID']).each do |review|
+  Review.where(:reviewablesID => payload['reviewableID']).each do |review|
 
-    hash = {:username => review.username, :rating => review.rating, :up_votes => review.upvotesTotal, :down_votes => review.downvotesTotal, :review => review.reviewText, :reviewID => reviewID}
+    hash = {:username => review.username, :rating => review.rating, :up_votes => review.upvotesTotal, :down_votes => review.downvotesTotal, :review => review.reviewText, :reviewID => review.reviewID}
 
     reviewList.push(hash)
 
@@ -97,14 +110,76 @@ post '/addReview' do
   puts "/addReview SUCESS"
 
   payload = JSON.parse(request.body.read)
-puts payload
+  puts payload
   puts
   puts
 
-  Review.create(:reviewableID => payload['reviewableID'], :reviewText => payload['review'], :rating => payload['rating'], :username => payload['username'])
+  Review.create(:reviewablesID => payload['reviewableID'], :reviewText => payload['review'], :rating => payload['rating'], :username => payload['username'])
 
-
+  content_type :json
+  { add_review: "" }.to_json
+  
 end 
+
+post '/editReview' do
+  
+  puts "/editReview SUCCESS"
+
+  payload = JSON.parse(request.body.read)  
+
+  review = Review.where(:reviewID => payload['reviewID'])
+
+  if review.empty? == false
+    review.update(:reviewText => payload['reviewText'])
+    review.update(:rating => payload['rating'])
+  end
+
+  content_type :json
+  { edit_review: "" }.to_json
+
+end
+
+post '/deleteReview' do
+
+  puts "/deleteReview SUCCESS"
+  
+  payload = JSON.parse(request.body.read)  
+
+  if Review.where(:reviewID => payload['reviewID']).empty? == false
+
+    Review.where(:reviewID => payload['reviewID']).delete
+
+  end
+
+  content_type :json
+  { delete_review: "" }.to_json
+
+end
+
+#--------------------------------------------------------------- vote
+post '/vote' do
+  
+    puts "/vote SUCCESS"
+  
+    payload = JSON.parse(request.body.read)
+  
+    if Review.where(:reviewID => payload['reviewID'].empty? == false)
+      if payload['votetype'] > 0
+
+        Review.where(:reviewID => payload['reviewID']).update(:upvotesTotal => :upvotesTotal + 1)
+
+      else
+
+        Review.where(:reviewID => payload['reviewID']).update(:downvotesTotal => :downvotesTotal + 1)   
+      end
+    end
+
+    content_type :json
+    { vote: "" }.to_json
+  
+  end
+
+#--------------------------------------------------------------- User
 
 post '/signUp' do
   
@@ -148,7 +223,91 @@ post '/signIn' do
 
 end
 
+post '/updateUser' do
 
+  puts "/updateUser SUCCESS"
+  
+  payload = JSON.parse(request.body.read)
+
+  user = User.where(:username => payload['username'])
+
+  if user.empty? == false
+    if payload['email'] != ""
+      user.update(:email => payload['email'])
+    end
+
+    if payload['password'] != ""
+      user.update(:password => payload['password'])
+    end
+
+  end
+
+  content_type :json
+  { update_user: "" }.to_json
+end
+
+#--------------------------------------------------------------- School
+post '/addSchool' do
+  puts "/addSchool SUCCESS"
+  
+  payload = JSON.parse(request.body.read)
+
+  school = School.create(:schoolName => payload['schoolName'], :schoolCoordinates => payload['schoolCoordinates'])
+
+  content_type :json
+  { schoolID: school.schoolID }.to_json
+
+end
+
+post '/getSchools' do
+  puts "/getSchools"
+  
+  schoolList = Array.new()
+
+  School.order(:schoolName).each do |school|
+
+    hash = {:school_name => school.schoolName, :school_id => school.schoolID}
+    
+    schoolList.push(hash)
+  end
+
+  content_type :json
+  { schools: schoolList }.to_json
+
+end
+
+#--------------------------------------------------------------- Building
+post '/addBuilding' do
+  puts "/addBuilding SUCCESS"
+
+  payload = JSON.parse(request.body.read)
+  
+  building = Building.create(:schoolID => payload['schoolID'], :name => payload['name'], :noOfFloors => payload['noOfFloors'], :coordinates => payload['coordinates'])
+
+  content_type :json
+  { buildingID: building.buildingID }.to_json
+end
+
+post '/getBuilding' do
+
+  puts "/getBuilding SUCCESS"
+  
+  payload = JSON.parse(request.body.read)
+
+  buildingList = Array.new()
+
+  Building.where(:schoolID => payload['schoolID']).each do |building|
+    
+        hash = {:building_name => building.name, :building_id => building.buildingID, :noOfFloors => building.noOfFloors}
+    
+        buildingList.push(hash)
+  end
+
+
+  content_type :json
+  { buildings: buildingList }.to_json
+
+end
 
 end
 
