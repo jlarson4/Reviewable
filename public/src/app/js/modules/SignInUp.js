@@ -20,7 +20,8 @@ export class SignInUp extends React.Component {
 			school_id: -1,
 			school_lat: -1,
 			school_long: -1,
-			buildings: []
+			buildings: [],
+			schools: []
 		}
 	}
 
@@ -99,7 +100,8 @@ export class SignInUp extends React.Component {
 	renderSchoolOptions(){
 		let options = [];
 		options.push(<option value="">Select</option>);
-		let schools = [{school_name: 'Carthage College', school_id: 0}, {school_name: 'University of Chicago', school_id: 1}]; //getSchoolOptions()
+		this.getSchoolOptions();
+		let schools = this.state.schools;
 		for(let i = 0; i < schools.length; i++) {
 			options.push(<option value={schools[i]['school_id']} key={"school-" + schools[i]['school_id']}>{schools[i]['school_name']}</option>);
 		}
@@ -184,6 +186,23 @@ export class SignInUp extends React.Component {
 
 	addSchool(){
 		//do ajax to add a school, then begin adding buildings
+		let s = document.getElementById('schoolname').value;
+		let lat_long = document.getElementById('lat').value + '-' + document.getElementById('lng').value;
+		let categories = {
+			schooolName: s,
+			schoolCoordinates: lat_long
+		}
+		console.log(categories);
+		let data = JSON.stringify( categories );
+		fetch('./addSchool', {
+			method: 'POST',
+			body: data
+		}).then(function(response: any){
+			response.json().then(function(result: any){
+				console.log(result)
+				this.setState({school_id: result['schoolID']});
+			}.bind(this))
+		}.bind(this))
 
 		this.setState({addBuildings: true, newSchool: false});
 	}
@@ -236,6 +255,21 @@ export class SignInUp extends React.Component {
 
 	getSchoolOptions(){
 		//do ajax call to get school options and return them to the previous function
+		if(this.state.schools.length == 0)
+		{
+			let categories = {
+			}
+			let data = JSON.stringify( categories );
+			fetch('./getSchools', {
+				method: 'POST',
+				body: data
+			}).then(function(response: any){
+				response.json().then(function(result: any){
+					console.log(result)
+					this.setState({schools: result});
+				}.bind(this))
+			}.bind(this))
+		}
 	}
 
 	signInToggle(){
