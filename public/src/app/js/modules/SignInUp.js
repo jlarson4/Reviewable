@@ -98,15 +98,19 @@ export class SignInUp extends React.Component {
 		}
 	}
 	renderSchoolOptions(){
-		let options = [];
-		options.push(<option value="">Select</option>);
 		this.getSchoolOptions();
-		let schools = this.state.schools;
-		for(let i = 0; i < schools.length; i++) {
-			options.push(<option value={schools[i]['school_id']} key={"school-" + schools[i]['school_id']}>{schools[i]['school_name']}</option>);
+		if(this.state.schools.length != 0){
+			console.log(this.state.schools)
+			console.log(this.state.schools.length)
+			let options = [];
+			options.push(<option value="">Select</option>);
+			for(let i = 0; i < this.state.schools.length; i++) {
+				console.log(i)
+				options.push(<option value={this.state.schools[i]['school_id']} key={"school-" + this.state.schools[i]['school_id']}>{this.state.schools[i]['school_name']}</option>);
+			}
+			options.push(<option value="new">Add New School</option>);
+			return options;
 		}
-		options.push(<option value="new">Add New School</option>);
-		return options;
 	}
 
 	renderNewSchool(){
@@ -192,14 +196,12 @@ export class SignInUp extends React.Component {
 			schoolName: s,
 			schoolCoordinates: lat_long
 		}
-		console.log(categories);
 		let data = JSON.stringify( categories );
 		fetch('./addSchool', {
 			method: 'POST',
 			body: data
 		}).then(function(response: any){
 			response.json().then(function(result: any){
-				console.log(result)
 				this.setState({school_id: result['schoolID']});
 			}.bind(this))
 		}.bind(this))
@@ -232,9 +234,42 @@ export class SignInUp extends React.Component {
 
 	finalizeBuildings(){
 		for(let i = 0; i < this.state.buildings.length; i++) {
-			//do an ajax call to the server for each building in the array		
+			//do an ajax call to the server for each building in the array
+			let categories = {
+				schoolID: this.props.school_id,
+				name: this.state.buildings[i]['name'],
+				noOfFloors: this.state.buildings[i]['noOfFloors'],
+				coordinates: this.state.buildings[i]['pos']
+			}
+			let data = JSON.stringify( categories );
+			fetch('./addBuilding', {
+				method: 'POST',
+				body: data
+			}).then(function(response: any){
+				response.json().then(function(result: any){
+					console.log(result)
+				}.bind(this))
+			}.bind(this))	
 		}
 		//add new user now
+		let categories = {
+			username: this.state.username,
+			password: this.state.password,
+			email: this.state.email,
+			firstName: this.state.firstname,
+			lastName: this.state.lastname
+		}
+		let data = JSON.stringify( categories );
+		fetch('./signUp', {
+			method: 'POST',
+			body: data
+		}).then(function(response: any){
+			response.json().then(function(result: any){
+				if(result['signed_up']){
+					this.props.function_pointer(true, 'Test');
+				}
+			}.bind(this))
+		}.bind(this))
 
 		//change states
 	}
@@ -265,8 +300,7 @@ export class SignInUp extends React.Component {
 				body: data
 			}).then(function(response: any){
 				response.json().then(function(result: any){
-					console.log(result)
-					this.setState({schools: result});
+					this.setState({schools: result['schools']});
 				}.bind(this))
 			}.bind(this))
 		}
@@ -300,7 +334,6 @@ export class SignInUp extends React.Component {
 					lastName: ln
 				}
 				let data = JSON.stringify( categories );
-				console.log(data)
 				fetch('./signUp', {
 					method: 'POST',
 					body: data
