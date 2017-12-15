@@ -189,7 +189,7 @@ export class SignInUp extends React.Component {
 		let s = document.getElementById('schoolname').value;
 		let lat_long = document.getElementById('lat').value + '-' + document.getElementById('lng').value;
 		let categories = {
-			schooolName: s,
+			schoolName: s,
 			schoolCoordinates: lat_long
 		}
 		console.log(categories);
