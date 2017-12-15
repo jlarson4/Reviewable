@@ -109,6 +109,9 @@ button, .btn {
 	height: 100%;
 	display: inline-block;
 	vertical-align: top;
+
+	background-color: #a7a8a6;
+	padding: 10px;
 }
 
 .mapMenuSearchBar{
@@ -125,6 +128,32 @@ button, .btn {
 
 .mapMenuText{
 	margin-left: 25px;
+}
+.mapMenuText2{
+	position: relative;
+	margin-left: 25px;
+	top: 4px;
+}
+.mapMenuText3{
+	position: relative;
+	margin-left: 25px;
+	top: 9px;
+}
+.mapMenuText4{
+	position: relative;
+	margin-left: 25px;
+	top: 11px;
+}
+
+.menuItem{
+	/*border: 2px solid #605f5f;*/
+	/*background-color: #a7a8a6;*/
+	/*padding: 10px;*/
+}
+
+.menuItem2{
+	/*background-color: #c5c6c4;*/
+	/*padding: 10px;*/
 }
 
 /* Customize the label (the container) */
@@ -151,6 +180,7 @@ button, .btn {
 /* Create a custom checkbox */
 .checkmark {
 	position: absolute;
+	margin-top: 5;
 	top: 0;
 	left: 0;
 	height: 25px;
@@ -163,7 +193,7 @@ button, .btn {
 }
 /* When the checkbox is checked, add a blue background */
 .container input:checked ~ .checkmark {
-	background-color: #2196F3;
+	background-color: #931919;
 }
 /* Create the checkmark/indicator (hidden when not checked) */
 .checkmark:after {
@@ -206,7 +236,7 @@ button, .btn {
 .mapMenuArrow2{
 	/*float: right;*/
 	vertical-align: middle;
-	margin-left: 22;
+	margin-left: 20;
 	/*margin-right: 55px;*/
 	/*margin-bottom: 0px;*/
 }
@@ -220,7 +250,7 @@ button, .btn {
 }
 /* When the checkbox is checked, add a blue background */
 .container2 input:checked ~ .checkmark {
-  background-color: #2196F3;
+  background-color: #931919;
 }
 /* Show the checkmark when checked */
 .container2 input:checked ~ .checkmark:after {
@@ -257,7 +287,7 @@ button, .btn {
 .mapMenuArrow3{
 	/*float: right;*/
 	vertical-align: middle;
-	margin-left: 40;
+	margin-left: 37;
 	/*margin-right: 24;*/
 	/*margin-bottom: 0px;*/
 }
@@ -271,7 +301,7 @@ button, .btn {
 }
 /* When the checkbox is checked, add a blue background */
 .container3 input:checked ~ .checkmark {
-  background-color: #2196F3;
+  background-color: #931919;
 }
 /* Show the checkmark when checked */
 .container3 input:checked ~ .checkmark:after {
@@ -289,6 +319,58 @@ button, .btn {
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
 }
+/*indented indented container*/
+.container4 {
+  display: inline-block;
+	width: 60%;
+  position: relative;
+  padding-left: 35px;
+
+  margin-bottom: -5px;
+  cursor: pointer;
+	margin-left: 55;
+  /*font-size: 22px;*/
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.mapMenuArrow4{
+	/*float: right;*/
+	vertical-align: middle;
+	margin-left: 17;
+	/*margin-right: 24;*/
+	/*margin-bottom: 0px;*/
+}
+.container4 input {
+  position: absolute;
+  opacity: 0;
+}
+/* On mouse-over, add a grey background color */
+.container4:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+/* When the checkbox is checked, add a blue background */
+.container4 input:checked ~ .checkmark {
+  background-color: #931919;
+}
+/* Show the checkmark when checked */
+.container4 input:checked ~ .checkmark:after {
+  display: block;
+}
+/* Style the checkmark/indicator */
+.container4 .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
 
 input {
 	border-radius: 10px;
@@ -303,7 +385,7 @@ input[type="password"], input[type="text"], input[type="email"], input[type="num
 	border: 1px solid gray;
 	border-radius: 15px;
 	width: 100%;
-	
+
 }
 input[type="text"]:focus, input[type="password"]:focus{
 	outline: none;
@@ -580,9 +662,9 @@ span.error, p.error{
     background-color: #aaaaaa;
 }
 
-::-webkit-scrollbar-track { 
-    background-color: #cccccc; 
-    border-radius: 8px; 
+::-webkit-scrollbar-track {
+    background-color: #cccccc;
+    border-radius: 8px;
 }
 textarea{
 		-webkit-appearance: none;
@@ -595,7 +677,7 @@ textarea{
 		color: #bfbfbf;
 		border: 1px solid #bfbfbf;
 		border-radius: 20px;
-		
+
 }
 textarea:focus{
 	outline: none;
@@ -614,7 +696,7 @@ select{
 	appearance: none;
 	-ms-box-sizing: content-box;
 	-moz-box-sizing: content-box;
-	-webkit-box-sizing: content-box; 
+	-webkit-box-sizing: content-box;
 	box-sizing: content-box;
 	max-width: 99.2%;
 	padding: 12px 0;
