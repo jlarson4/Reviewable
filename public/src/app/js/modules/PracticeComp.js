@@ -112,7 +112,7 @@ export class PracticeComp extends React.Component {
 						<label className="container2" for="XXXstring" >
 		  				<input type="checkbox" name="XXXstring" defaultChecked="checked" />
 		  				<span className="checkmark"></span>
-							<span className="mapMenuText2">That one fucking botch who i hate with a passion</span>
+							<span className="mapMenuText2">Logan</span>
 						</label>
 						<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow2" id="Logan" onClick={(event) => this.menuArrowClicked(event)} />
 					</h3>
