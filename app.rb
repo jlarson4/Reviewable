@@ -257,24 +257,20 @@ post '/signIn' do
 
   payload = JSON.parse(request.body.read)
 
-  hash = Hash.new()
+  schoolID = 0
+  coordinates = ""
   retVal = false
 
   if User.where(:username => payload['username']).empty? == false && User.where(:username => payload['username']).get(:password) == payload['password']
 
-    user = User.where(:username => payload['username'])
-    school = School.where(user.schoolID)
-
-    hash[:schoolID] = user.schoolID
-    hash[:coordinates] = school.schoolCoordinates    
-
+    schoolID = User.where(:username => payload['username']).get(:schoolID)
+    coordinates = School.where(:schoolID => schoolID).get(:schoolCoordinates)   
     retVal = true
+
     end
 
-    hash[:retVal] = retVal
-
   content_type :json
-      { sign_in: hash }.to_json
+      { signed_up: retVal, schoolID: schoolID, coordinates: coordinates  }.to_json
 
 end
 
@@ -323,7 +319,7 @@ post '/getSchools' do
 
   School.order(:schoolName).each do |school|
 
-    hash = {:school_name => school.schoolName, :school_id => school.schoolID}
+    hash = {:school_name => school.schoolName, :school_id => school.schoolID, :coordinates => school.schoolCoordinates}
     
     schoolList.push(hash)
   end
