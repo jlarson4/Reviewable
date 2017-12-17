@@ -126,6 +126,7 @@ button, .btn {
 }
 
 .mapMenuButton{
+	padding-top: 10px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -596,7 +597,7 @@ span.error, p.error{
 }
 .profile-settings-div{
 	float:right;
-	padding-top: 10px;
+	padding: 10px 10px 0 0;
 }
 #school-select{
 	width: 100%;

@@ -10,7 +10,17 @@ export class PracticeComp extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			menuArrowArr:[],
+			menuArrowArr: [],
+			buildings: [
+				{name: 'Bathroom 1a', reviewableID: 0, sub_category: 'David Straz Center', reviewable_description: 'david-straz-center-1'}, 
+				{name: 'Bathroom 2a', reviewableID: 0, sub_category: 'David Straz Center', reviewable_description: 'david-straz-center-2'}, 
+				{name: 'Bathroom 3a', reviewableID: 0, sub_category: 'David Straz Center', reviewable_description: 'david-straz-center-2'}, 
+				{name: 'Bathroom 1a', reviewableID: 0, sub_category: 'Lentz Hall', reviewable_description: 'lentz-hall-1'}, 
+				{name: 'Bathroom 2a', reviewableID: 0, sub_category: 'Lentz Hall', reviewable_description: 'lentz-hall-1'}, 
+				{name: 'Bathroom 3a', reviewableID: 0, sub_category: 'Lentz Hall', reviewable_description: 'lentz-hall-2'}, 
+			],
+			classes: [{name: 'Class 1', reviewableID: 0}, {name: 'Class 2', reviewableID: 1}],
+			people: [{name: 'Mahoney', reviewableID: 0, sub_category: 'professor'}, {name: 'Bob', reviewableID: 1, sub_category: 'student'}, {name: 'Bill', reviewableID: 1, sub_category: 'student'}],
 			userModal: false,
 			reviewModal: false
 		};
@@ -35,25 +45,115 @@ export class PracticeComp extends React.Component {
 			/*the menu is closed - open it.*/
 			array.push(string.target.id);
 		}
-		this.setState(this.state.menuArrowArr, array);
+		this.setState({menuArrowArr: array});
 	}
 
 	renderBuildingSubMenu() {
 		if (this.state.menuArrowArr.includes("Buildings"))
 		{
-			return(
+			let sub_categories = [];
+			for(let i = 0; i < this.state.buildings.length; i++) {
+				if(!sub_categories.includes(this.state.buildings[i]['sub_category'])) {
+					sub_categories.push(this.state.buildings[i]['sub_category']);
+				}
+			}
+			let options = [];
+			for(let i = 0; i < sub_categories.length; i++) {
+				options.push(
+					<div>
+						<h3 className="menuItem2" key={i}>
+							<label className="container2" for="XXXstring" >
+			  				<input type="checkbox" name="XXXstring" defaultChecked="checked" />
+			  				<span className="checkmark"></span>
+								<span className="mapMenuText2">{sub_categories[i].charAt(0).toUpperCase() + sub_categories[i].slice(1)}</span>
+							</label>
+							<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow" id={sub_categories[i]} onClick={(event) => this.menuArrowClicked(event)} />
+						</h3>
+
+					<velocity.VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
+						{this.renderBuildingSubSubMenu(sub_categories[i])}
+					</velocity.VelocityTransitionGroup>
+						
+					</div>
+				);
+			}
+			return (
 				<div>
-					<h3 className="menuItem2">
-						<label className="container2" for="XXXstring" >
-		  				<input type="checkbox" name="XXXstring" defaultChecked="checked" />
-		  				<span className="checkmark"></span>
-							<span className="mapMenuText2">DSC</span>
-						</label>
-						<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow2" id="DSC" onClick={(event) => this.menuArrowClicked(event)} />
-					</h3>
-					{this.renderShit()}
+					{options}
 				</div>
-			)
+			);
+		}
+	}
+	renderBuildingSubSubMenu(sub_category){
+		if (this.state.menuArrowArr.includes(sub_category))
+		{
+			let sub_categories = [];
+			for(let i = 0; i < this.state.buildings.length; i++) {
+				if(!sub_categories.includes(this.state.buildings[i]['reviewable_description']) && this.state.buildings[i]['sub_category'] == sub_category) {
+					sub_categories.push(this.state.buildings[i]['reviewable_description']);
+				}
+			}
+			let options = [];
+			for(let i = 0; i < sub_categories.length; i++) {
+				options.push(
+					<div>
+						<h3 className="menuItem3" key={i}>
+							<label className="container3" for="XXXstring" >
+			  				<input type="checkbox" name="XXXstring" defaultChecked="checked" />
+			  				<span className="checkmark"></span>
+								<span className="mapMenuText3">{"Floor " + sub_categories[i]}</span>
+							</label>
+							<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow" id={sub_categories[i]} onClick={(event) => this.menuArrowClicked(event)} />
+						</h3>
+
+					<velocity.VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
+						{this.renderBuildingSubSubSubMenu(sub_categories[i])}
+					</velocity.VelocityTransitionGroup>
+						
+					</div>
+				);
+			}
+			return (
+				<div>
+					{options}
+				</div>
+			);
+		}
+	}
+	renderBuildingSubSubSubMenu(sub_category){
+		if (this.state.menuArrowArr.includes(sub_category))
+		{
+			let sub_categories = [];
+			for(let i = 0; i < this.state.buildings.length; i++) {
+				if(!sub_categories.includes(this.state.buildings[i]['reviewable_description'])) {
+					sub_categories.push(this.state.buildings[i]['reviewable_description']);
+				}
+			}
+			let options = [];
+			for(let i = 0; i < sub_categories.length; i++) {
+				options.push(
+					<div>
+						<h3 className="menuItem3" key={i}>
+							<label className="container3" for="XXXstring" >
+			  				<input type="checkbox" name="XXXstring" defaultChecked="checked" />
+			  				<span className="checkmark"></span>
+								<span className="mapMenuText3">{"Floor " + sub_categories[i]}</span>
+							</label>
+							<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow" id={sub_category.replace(/ /g, "-") + '-' + sub_categories[i]} onClick={(event) => this.menuArrowClicked(event)} />
+						</h3>
+
+					<velocity.VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
+						{this.renderBuildingSubSubSubMenu(sub_category.replace(/ /g, "-")+ '-' + sub_categories[i])}
+					</velocity.VelocityTransitionGroup>
+						
+					</div>
+				);
+			}
+			return (
+				<div>
+					{options}
+				</div>
+			);
 		}
 	}
 
@@ -91,33 +191,88 @@ export class PracticeComp extends React.Component {
 	renderClassesSubMenu() {
 		if (this.state.menuArrowArr.includes("Classes"))
 		{
-			return(
-					<h3 className="menuItem2">
+			let options = [];
+			for(let i = 0; i < this.state.classes.length; i++) {
+				options.push(
+					<h3 className="menuItem2"  key={i}>
 						<label className="container2" for="XXXstring" >
 		  				<input type="checkbox" name="XXXstring" defaultChecked="checked" />
 		  				<span className="checkmark"></span>
-							<span className="mapMenuText2">Boring Shit</span>
+							<span className="mapMenuText2">{this.state.classes[i]['name']}</span>
 						</label>
-						<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow2" id="Boring Shit" onClick={(event) => this.menuArrowClicked(event)} />
 					</h3>
-			)
+				);
+			}
+			return (
+				<div>
+					{options}
+				</div>
+			);
 		}
 	}
 
 	renderPeopleSubMenu() {
 		if (this.state.menuArrowArr.includes("People"))
 		{
-			return(
-					<h3 className="menuItem2">
-						<label className="container2" for="XXXstring" >
-		  				<input type="checkbox" name="XXXstring" defaultChecked="checked" />
-		  				<span className="checkmark"></span>
-							<span className="mapMenuText2">Logan</span>
-						</label>
-						<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow2" id="Logan" onClick={(event) => this.menuArrowClicked(event)} />
-					</h3>
-			)
+			let sub_categories = [];
+			for(let i = 0; i < this.state.people.length; i++) {
+				if(!sub_categories.includes(this.state.people[i]['sub_category'])) {
+					sub_categories.push(this.state.people[i]['sub_category']);
+				}
+			}
+			let options = [];
+			for(let i = 0; i < sub_categories.length; i++) {
+				options.push(
+					<div>
+						<h3 className="menuItem2" key={i}>
+							<label className="container2" for="XXXstring" >
+			  				<input type="checkbox" name="XXXstring" defaultChecked="checked" />
+			  				<span className="checkmark"></span>
+								<span className="mapMenuText2">{sub_categories[i].charAt(0).toUpperCase() + sub_categories[i].slice(1)}</span>
+							</label>
+							<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow" id={sub_categories[i]} onClick={(event) => this.menuArrowClicked(event)} />
+						</h3>
+
+					<velocity.VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
+						{this.renderPeopleSubSubMenu(sub_categories[i])}
+					</velocity.VelocityTransitionGroup>
+						
+					</div>
+				);
+			}
+			return (
+				<div>
+					{options}
+				</div>
+			);
 		}
+	}
+
+	renderPeopleSubSubMenu(sub_category) {
+		if(this.state.menuArrowArr.includes(sub_category)) {
+			let options = [];
+			for (let i=0; i<this.state.people.length; i++) {
+				if(this.state.people[i]["sub_category"] == sub_category){
+					options.push(
+						<div>
+							<h4 className="menuItem3">
+								<label className="container3" for="XXXstring" >
+									<input type="checkbox" name="XXXstring" defaultChecked="checked" />
+									<span className="checkmark"></span>
+									<span className="mapMenuText3">{this.state.people[i]['name']}</span>
+								</label>
+							</h4>
+						</div>
+					)
+				}
+			}
+			return (
+				<div>
+					{options}
+				</div>
+			);
+		}
+		
 	}
 
 	render() {
@@ -134,7 +289,9 @@ export class PracticeComp extends React.Component {
 					</label>
 					<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow" id={this.props.menuItems[0]} onClick={(event) => this.menuArrowClicked(event)} />
 				</h2>
-				{this.renderBuildingSubMenu()}
+				<velocity.VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
+					{this.renderBuildingSubMenu()}
+				</velocity.VelocityTransitionGroup>
 				<h2  className="menuItem">
 					<label className="container" for='check2'>
 	  				<input type="checkbox" name='check2' defaultChecked="checked" />
@@ -143,7 +300,9 @@ export class PracticeComp extends React.Component {
 					</label>
 					<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow" id={this.props.menuItems[1]} onClick={(event) => this.menuArrowClicked(event)} />
 				</h2>
-				{this.renderClassesSubMenu()}
+				<velocity.VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
+					{this.renderClassesSubMenu()}
+				</velocity.VelocityTransitionGroup>
 				<h2  className="menuItem">
 					<label className="container" for='check3'>
 	  				<input type="checkbox" name='check3' defaultChecked="checked" />
@@ -152,7 +311,9 @@ export class PracticeComp extends React.Component {
 					</label>
 					<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow" id={this.props.menuItems[2]} onClick={(event) => this.menuArrowClicked(event)} />
 				</h2>
-				{this.renderPeopleSubMenu()}
+				<velocity.VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
+					{this.renderPeopleSubMenu()}
+				</velocity.VelocityTransitionGroup>
 				<div className="mapMenuButton"><button onClick={this.toggleNewReviewModal.bind(this)}> Make A Review</button></div>
 				<div className='profile-settings-div' onClick={this.toggleUserModal.bind(this)}> <img className='gear' src="src/app/css/gear.png"/> <span> Profile Settings </span></div>
 				{this.renderModal()}

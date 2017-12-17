@@ -280,7 +280,7 @@ export class ReviewModal extends React.Component {
 
 		if(c == 'building') {
 			sub = document.getElementById('building-select').value;
-			r = document.getElementById('floor-number').value;
+			r = document.getElementById('building-select').value.replace(/ /g, "-") + '-' + document.getElementById('floor-number').value;
 		} else if (c == 'person') {
 			sub = document.getElementById('person-select').value;
 		}
