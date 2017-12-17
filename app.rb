@@ -87,9 +87,9 @@ post '/getCategory' do
   
     categoryList = Array.new()
   
-    if Reviewableobject.where(:schoolID => payload['schoolID'], :category => payload['category']).empty? == false
+    if Reviewobject.where(:schoolID => payload['schoolID'], :category => payload['category']).empty? == false
   
-      Reviewableobject.where(:schoolID => payload['schoolID'], :category => payload['category']).each do |object|
+      Reviewobject.where(:schoolID => payload['schoolID'], :category => payload['category']).each do |object|
   
         hash = {:name => object.reviewableName, :coordinates => object.coordinates, :reviewableID => object.reviewableID, :sub_category => object.subCategory, :reviewable_description => object.reviewableDescription}
       
