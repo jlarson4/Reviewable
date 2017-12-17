@@ -44,7 +44,7 @@ class Reviewable < Sinatra::Base
                         String :category
                         String :subCategory
                         String :coordinates     
-
+                        Int :schoolID
                       end
 
           DB.create_table? :reviews do
@@ -72,7 +72,7 @@ post '/addReviewable' do
 
   payload = JSON.parse(request.body.read)
 
-  reviewable = Reviewobject.create(:reviewableName => payload['Reviewable_name'], :coordinates => payload['latLong'], :username => payload['username'], :category => payload['category'], :subCategory => payload['subCategory'], :reviewableDescription => payload['reviewableDescription'])
+  reviewable = Reviewobject.create(:reviewableName => payload['Reviewable_name'], :coordinates => payload['latLong'], :username => payload['username'], :category => payload['category'], :subCategory => payload['subCategory'], :reviewableDescription => payload['reviewableDescription'], :schoolID => payload['school_id'])
 
   content_type :json
   { reviewableID: reviewable.reviewablesID }.to_json
@@ -82,16 +82,17 @@ end
 post '/getCategory' do
   
     puts "/getCategory SUCCESS"
+
   
     payload = JSON.parse(request.body.read)
   
     categoryList = Array.new()
   
-    if Reviewobject.where(:schoolID => payload['schoolID'], :category => payload['category']).empty? == false
+    if Reviewobject.where(:schoolID => payload['school_id'], :category => payload['category']).empty? == false
   
-      Reviewobject.where(:schoolID => payload['schoolID'], :category => payload['category']).each do |object|
-  
-        hash = {:name => object.reviewableName, :coordinates => object.coordinates, :reviewableID => object.reviewableID, :sub_category => object.subCategory, :reviewable_description => object.reviewableDescription}
+      Reviewobject.where(:schoolID => payload['school_id'], :category => payload['category']).each do |object|
+
+        hash = {:name => object.reviewableName, :coordinates => object.coordinates, :reviewableID => object.reviewablesID, :sub_category => object.subCategory, :reviewable_description => object.reviewableDescription}
       
         categoryList.push(hash)
   
