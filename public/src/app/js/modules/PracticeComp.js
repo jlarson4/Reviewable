@@ -95,16 +95,17 @@ export class PracticeComp extends React.Component {
 			}
 			let options = [];
 			for(let i = 0; i < sub_categories.length; i++) {
+				let split = sub_categories[i].split('-');
 				options.push(
 					<div>
-						<h3 className="menuItem3" key={i}>
+						<h4 className="menuItem3" key={i}>
 							<label className="container3" for="XXXstring" >
 			  				<input type="checkbox" name="XXXstring" defaultChecked="checked" />
 			  				<span className="checkmark"></span>
-								<span className="mapMenuText3">{"Floor " + sub_categories[i]}</span>
+								<span className="mapMenuText3">{"Floor " + split[split.length-1]}</span>
 							</label>
 							<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow" id={sub_categories[i]} onClick={(event) => this.menuArrowClicked(event)} />
-						</h3>
+						</h4>
 
 					<velocity.VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
 						{this.renderBuildingSubSubSubMenu(sub_categories[i])}
@@ -123,31 +124,21 @@ export class PracticeComp extends React.Component {
 	renderBuildingSubSubSubMenu(sub_category){
 		if (this.state.menuArrowArr.includes(sub_category))
 		{
-			let sub_categories = [];
-			for(let i = 0; i < this.state.buildings.length; i++) {
-				if(!sub_categories.includes(this.state.buildings[i]['reviewable_description'])) {
-					sub_categories.push(this.state.buildings[i]['reviewable_description']);
-				}
-			}
 			let options = [];
-			for(let i = 0; i < sub_categories.length; i++) {
-				options.push(
-					<div>
-						<h3 className="menuItem3" key={i}>
-							<label className="container3" for="XXXstring" >
-			  				<input type="checkbox" name="XXXstring" defaultChecked="checked" />
-			  				<span className="checkmark"></span>
-								<span className="mapMenuText3">{"Floor " + sub_categories[i]}</span>
-							</label>
-							<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow" id={sub_category.replace(/ /g, "-") + '-' + sub_categories[i]} onClick={(event) => this.menuArrowClicked(event)} />
-						</h3>
-
-					<velocity.VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}}>
-						{this.renderBuildingSubSubSubMenu(sub_category.replace(/ /g, "-")+ '-' + sub_categories[i])}
-					</velocity.VelocityTransitionGroup>
-						
-					</div>
-				);
+			for(let i = 0; i < this.state.buildings.length; i++) {
+				if(this.state.buildings[i]['reviewable_description'] == sub_category) {
+					options.push(
+						<div>
+							<h5 className="menuItem4" key={i}>
+								<label className="container4" for="XXXstring" >
+				  				<input type="checkbox" name="XXXstring" defaultChecked="checked" />
+				  				<span className="checkmark"></span>
+									<span className="mapMenuText4">{this.state.buildings[i]['name']}</span>
+								</label>
+							</h5>
+						</div>
+					);
+				}
 			}
 			return (
 				<div>

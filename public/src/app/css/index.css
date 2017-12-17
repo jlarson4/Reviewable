@@ -160,8 +160,11 @@ button, .btn {
 .menuItem2, .menuItem3, .menuItem4{
 	border-bottom: 2px solid #605f5f;
 	background-color: #c5c6c4;
-	padding: 0 10px;
+	padding: 5px 10px;
 	margin:0;
+}
+.menuItem4{
+	padding: 10px;
 }
 
 /* Customize the label (the container) */
