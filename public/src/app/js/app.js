@@ -15,7 +15,8 @@ class App extends React.Component {
 		super();
 		this.state = {
 			logged_in: false,
-			username: ''
+			username: '',
+			school_id: -1
 		}
 	}
 
@@ -108,9 +109,10 @@ class App extends React.Component {
 		}.bind(this))
 	}
 
-	setLoggedIn(val, user){
+	setLoggedIn(val, user, id){
 		this.setState({logged_in: val});
 		this.setState({username: user});
+		this.setState({school_id: id});
 	}
 }
 

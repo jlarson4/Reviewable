@@ -98,16 +98,18 @@ export class SignInUp extends React.Component {
 		}
 	}
 	renderSchoolOptions(){
-		this.getSchoolOptions();
 		if(this.state.schools.length != 0){
-			console.log(this.state.schools)
-			console.log(this.state.schools.length)
 			let options = [];
 			options.push(<option value="">Select</option>);
 			for(let i = 0; i < this.state.schools.length; i++) {
-				console.log(i)
 				options.push(<option value={this.state.schools[i]['school_id']} key={"school-" + this.state.schools[i]['school_id']}>{this.state.schools[i]['school_name']}</option>);
 			}
+			options.push(<option value="new">Add New School</option>);
+			return options;
+		} else {
+			this.getSchoolOptions();
+			let options = [];
+			options.push(<option value="">Select</option>);
 			options.push(<option value="new">Add New School</option>);
 			return options;
 		}
@@ -191,7 +193,7 @@ export class SignInUp extends React.Component {
 	addSchool(){
 		//do ajax to add a school, then begin adding buildings
 		let s = document.getElementById('schoolname').value;
-		let lat_long = document.getElementById('lat').value + '-' + document.getElementById('lng').value;
+		let lat_long = document.getElementById('lat').value + '/' + document.getElementById('lng').value;
 		let categories = {
 			schoolName: s,
 			schoolCoordinates: lat_long
@@ -203,10 +205,10 @@ export class SignInUp extends React.Component {
 		}).then(function(response: any){
 			response.json().then(function(result: any){
 				this.setState({school_id: result['schoolID']});
+				this.setState({addBuildings: true, newSchool: false});
 			}.bind(this))
 		}.bind(this))
 
-		this.setState({addBuildings: true, newSchool: false});
 	}
 
 	cancelSchool(){
@@ -227,7 +229,7 @@ export class SignInUp extends React.Component {
 		let lng = document.getElementById('lng').value;
 		let num = document.getElementById('floors').value;
 		
-		temp.push({name: n, pos:lat + '-' + lng, noOfFloors: num});
+		temp.push({name: n, pos:lat + '/' + lng, noOfFloors: num});
 
 		this.setState({buildings: temp});
 	}
@@ -236,7 +238,7 @@ export class SignInUp extends React.Component {
 		for(let i = 0; i < this.state.buildings.length; i++) {
 			//do an ajax call to the server for each building in the array
 			let categories = {
-				schoolID: this.props.school_id,
+				schoolID: this.state.school_id,
 				name: this.state.buildings[i]['name'],
 				noOfFloors: this.state.buildings[i]['noOfFloors'],
 				coordinates: this.state.buildings[i]['pos']
@@ -266,7 +268,7 @@ export class SignInUp extends React.Component {
 		}).then(function(response: any){
 			response.json().then(function(result: any){
 				if(result['signed_up']){
-					this.props.function_pointer(true, 'Test');
+					this.props.function_pointer(true, this.state.username, this.state.school_id);
 				}
 			}.bind(this))
 		}.bind(this))
@@ -300,6 +302,7 @@ export class SignInUp extends React.Component {
 				body: data
 			}).then(function(response: any){
 				response.json().then(function(result: any){
+					console.log(result)
 					this.setState({schools: result['schools']});
 				}.bind(this))
 			}.bind(this))
@@ -331,7 +334,8 @@ export class SignInUp extends React.Component {
 					password: p,
 					email: e,
 					firstName: fn,
-					lastName: ln
+					lastName: ln,
+					schoolID: s
 				}
 				let data = JSON.stringify( categories );
 				fetch('./signUp', {
@@ -340,7 +344,7 @@ export class SignInUp extends React.Component {
 				}).then(function(response: any){
 					response.json().then(function(result: any){
 						if(result['signed_up']){
-							this.props.function_pointer(true, 'Test');
+							this.props.function_pointer(true, this.state.username, s);
 						}
 					}.bind(this))
 				}.bind(this))
@@ -404,7 +408,8 @@ export class SignInUp extends React.Component {
 		}).then(function(response: any){
 			response.json().then(function(result: any){
 				if(result['signed_up']){
-					this.props.function_pointer(true, 'Test');
+					console.log(result)
+					this.props.function_pointer(true, 'Test', result['school_id']);
 				} else {
 					$('#signInError').text("Incorrect Username or Password, retry");
 				}

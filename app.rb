@@ -67,6 +67,7 @@ class Reviewable < Sinatra::Base
   end
 
 #--------------------------------------------------------------- ReviewObject
+#WORKS
 post '/addReviewable' do
   puts "/addReviewable SUCCESS"
 
@@ -79,6 +80,7 @@ post '/addReviewable' do
 end
 
 #--------------------------------------------------------------- Reviews
+#WORKS
 post '/getReviews' do
 
   puts "/getReviews SUCCESS"
@@ -104,7 +106,7 @@ post '/getReviews' do
 
   end
 
-
+#WORKS
 post '/addReview' do
 
   puts "/addReview SUCESS"
@@ -211,15 +213,17 @@ post '/signIn' do
 
 
   retVal = false
+  id = 0
   #userTable = User.where(:username => payload['username'])
 
   if User.where(:username => payload['username']).empty? == false && User.where(:username => payload['username']).get(:password) == payload['password']
 
     retVal = true
+    id = User.where(:username => payload['username']).get(:schoolID)
     end
 
   content_type :json
-      { signed_up: retVal }.to_json
+      { signed_up: retVal, school_id: id }.to_json
 
 end
 
@@ -228,6 +232,7 @@ post '/updateUser' do
   puts "/updateUser SUCCESS"
   
   payload = JSON.parse(request.body.read)
+  puts payload
 
   user = User.where(:username => payload['username'])
 
