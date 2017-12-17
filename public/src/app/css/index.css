@@ -8,7 +8,7 @@ body{
 }
 
 .mapContainer{
-	width:78%;
+	width:80%;
 	float: right;
 	display: inline-block;
 
@@ -116,10 +116,10 @@ button, .btn {
 	vertical-align: top;
 
 	background-color: #a7a8a6;
-	padding: 10px;
 }
 
 .mapMenuSearchBar{
+	padding: 10px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -151,25 +151,16 @@ button, .btn {
 }
 
 .menuItem{
-	border: 2px solid #605f5f;
-	/*background-color: #a7a8a6;*/
-	/*padding: 10px;*/
+	border-bottom: 2px solid #605f5f;
+	padding: 0 10px;
+	margin:0;
 }
 
-.menuItem2{
-	border: 2px solid #605f5f;
+.menuItem2, .menuItem3, .menuItem4{
+	border-bottom: 2px solid #605f5f;
 	background-color: #c5c6c4;
-	/*padding: 10px;*/
-}
-.menuItem3{
-	border: 2px solid #605f5f;
-	background-color: #c5c6c4;
-	/*padding: 10px;*/
-}
-.menuItem4{
-	border: 2px solid #605f5f;
-	background-color: #c5c6c4;
-	/*padding: 10px;*/
+	padding: 0 10px;
+	margin:0;
 }
 
 /* Customize the label (the container) */
