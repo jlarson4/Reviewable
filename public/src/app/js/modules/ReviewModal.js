@@ -272,9 +272,38 @@ export class ReviewModal extends React.Component {
 	}
 	submitNewReviewable(){
 		let t = document.getElementById('name').value;
+		let l = document.getElementById('lat').value + '/' + document.getElementById('lng').value; //latlong
+		let u = this.props.username;
+		let c = document.getElementById('category-select').value; //category
+		let sub = ''; //subcategory
+		let r = ''; //description
+
+		if(c == 'building') {
+			sub = document.getElementById('building-select').value;
+			r = document.getElementById('floor-number').value;
+		} else if (c == 'person') {
+			sub = document.getElementById('person-select').value;
+		}
 		//sends in the new reviewable and loads review form for that reviewable
-		this.setState({newReviewable: false, reviewableID: 0, reviewableTitle: t});
-		this.setState({createReview: true});
+		let categories = {
+			Reviewable_name: t,
+			latLong: l,
+			username: u,
+			category: c,
+			subCategory: sub,
+			reviewableDescription: r
+		}
+		let data = JSON.stringify( categories );
+		fetch('./addReviewable', {
+			method: 'POST',
+			body: data
+		}).then(function(response: any){
+			response.json().then(function(result: any){
+				console.log(result)
+				this.setState({newReviewable: false, reviewableID: 0, reviewableTitle: result['reviewableID']});
+				this.setState({createReview: true});
+			}.bind(this))
+		}.bind(this))
 	}
 	submitReview(){
 		//review Submission AJAX goes here

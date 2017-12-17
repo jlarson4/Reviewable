@@ -185,7 +185,6 @@ export class UserModal extends React.Component {
 			email: e,
 		}
 		let data = JSON.stringify( categories );
-		console.log(data)
 		fetch('./updateUser', {
 			method: 'POST',
 			body: data
