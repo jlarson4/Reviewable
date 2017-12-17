@@ -67,7 +67,6 @@ class Reviewable < Sinatra::Base
   end
 
 #--------------------------------------------------------------- ReviewObject
-#WORKS
 post '/addReviewable' do
   puts "/addReviewable SUCCESS"
 
@@ -79,8 +78,33 @@ post '/addReviewable' do
   { reviewableID: reviewable.reviewablesID }.to_json
 end
 
+#--------------------------------------------------------------- /getCategory
+post '/getCategory' do
+  
+    puts "/getCategory SUCCESS"
+  
+    payload = JSON.parse(request.body.read)
+  
+    categoryList = Array.new()
+  
+    if Reviewableobject.where(:schoolID => payload['schoolID'], :category => payload['category']).empty? == false
+  
+      Reviewableobject.where(:schoolID => payload['schoolID'], :category => payload['category']).each do |object|
+  
+        hash = {:name => object.reviewableName, :coordinates => object.coordinates, :reviewableID => object.reviewableID, :sub_category => object.subCategory, :reviewable_description => object.reviewableDescription}
+      
+        categoryList.push(hash)
+  
+      end
+    end
+  
+    content_type :json
+    { reviewables: categoryList }.to_json
+  
+  end
+  
+
 #--------------------------------------------------------------- Reviews
-#WORKS
 post '/getReviews' do
 
   puts "/getReviews SUCCESS"
@@ -106,7 +130,7 @@ post '/getReviews' do
 
   end
 
-#WORKS
+
 post '/addReview' do
 
   puts "/addReview SUCESS"
@@ -157,7 +181,29 @@ post '/deleteReview' do
   { delete_review: "" }.to_json
 
 end
+#--------------------------------------------------------------- /getUserReviews
+post '/getUserReviews' do
 
+  puts "/getUserReviews SUCCESS"
+
+  payload = JSON.parse(request.body.read)
+
+  userReviewList = Array.new()
+
+  if Review.where(:username => payload['username']).empty? == false
+
+    Review.where(:username => payload['username']).each do |review|
+
+      hash = {:rating => review.rating, :up_votes => review.upvotesTotal, :down_votes => review.downvotesTotal, :review => review.reviewText, :reviewID => review.reviewID }
+
+      userReviewList.push(hash)
+    end
+
+    content_type :json
+    { reviews: userReviewList }.to_json
+  end
+
+end
 #--------------------------------------------------------------- vote
 post '/vote' do
   
@@ -211,19 +257,24 @@ post '/signIn' do
 
   payload = JSON.parse(request.body.read)
 
-
+  hash = Hash.new()
   retVal = false
-  id = 0
-  #userTable = User.where(:username => payload['username'])
 
   if User.where(:username => payload['username']).empty? == false && User.where(:username => payload['username']).get(:password) == payload['password']
 
+    user = User.where(:username => payload['username'])
+    school = School.where(user.schoolID)
+
+    hash[:schoolID] = user.schoolID
+    hash[:coordinates] = school.schoolCoordinates    
+
     retVal = true
-    id = User.where(:username => payload['username']).get(:schoolID)
     end
 
+    hash[:retVal] = retVal
+
   content_type :json
-      { signed_up: retVal, school_id: id }.to_json
+      { sign_in: hash }.to_json
 
 end
 
@@ -232,7 +283,6 @@ post '/updateUser' do
   puts "/updateUser SUCCESS"
   
   payload = JSON.parse(request.body.read)
-  puts payload
 
   user = User.where(:username => payload['username'])
 
@@ -334,177 +384,176 @@ post '/getSingleSchool' do
 
 end
 
-
 #--------------------------------------------------------------- Get Pins
 
-post '/getpins' do
+# post '/getpins' do
   
-  puts "/getpins SUCESS"
+#   puts "/getpins SUCESS"
 
-  payload = JSON.parse(request.body.read)
+#   payload = JSON.parse(request.body.read)
 
-  puts payload
+#   puts payload
 
-  returnVal = Array.new
-  #default no school DONE NOT TESTED
-    if (payload['category'] == nil && payload['sub_category'] == nil && payload['title'] == nil && payload['school_id'] == nil) 
+#   returnVal = Array.new
+#   #default no school DONE NOT TESTED
+#     if (payload['category'] == nil && payload['sub_category'] == nil && payload['title'] == nil && payload['school_id'] == nil) 
 
         
-        Reviewableobject.where(:reviewablesID != nil).each do |row|
-         hash = {:reviewablesID => row.reviewableID, :reviewableName =>row.reviewablesName, :coordinates => row.coordinates}
-         returnVal.push(hash)
-        end
+#         Reviewableobject.where(:reviewablesID != nil).each do |row|
+#          hash = {:reviewablesID => row.reviewableID, :reviewableName =>row.reviewablesName, :coordinates => row.coordinates}
+#          returnVal.push(hash)
+#         end
 
-      end
+#       end
 
-      #all pins for a specified school specified DONE, NOT TESTED
+#       #all pins for a specified school specified DONE, NOT TESTED
 
-       if (payload['category'] == nil && payload['sub_category'] == nil && payload['title'] == nil && payload['school_id'] != nil) 
+#        if (payload['category'] == nil && payload['sub_category'] == nil && payload['title'] == nil && payload['school_id'] != nil) 
         
-        Reviewableobject.where(:school_id => payload['school_id']).each do |row|
-         hash = {:reviewablesID => row.reviewableID, :reviewableName =>row.reviewablesName, :coordinates => row.coordinates}
-         returnVal.push(hash)
-        end
-      end 
+#         Reviewableobject.where(:school_id => payload['school_id']).each do |row|
+#          hash = {:reviewablesID => row.reviewableID, :reviewableName =>row.reviewablesName, :coordinates => row.coordinates}
+#          returnVal.push(hash)
+#         end
+#       end 
      
-    #if just category is checked and a category is chosen no school
+#     #if just category is checked and a category is chosen no school
 
-    if (payload['category'] != nil && payload['sub_category'] == nil && payload['title'] == nil && payload['school_id'] == nil) 
+#     if (payload['category'] != nil && payload['sub_category'] == nil && payload['title'] == nil && payload['school_id'] == nil) 
       
-      Reviewableobject.where(:category == payload['category']).each do |row|
+#       Reviewableobject.where(:category == payload['category']).each do |row|
 
-        hash = {:reviewblesID => row.reviewableID, :reviewableName =>row.reviewableName, :coordinates => row.coordinates}
-        returnVal.push(hash)
-      end
-    end
+#         hash = {:reviewblesID => row.reviewableID, :reviewableName =>row.reviewableName, :coordinates => row.coordinates}
+#         returnVal.push(hash)
+#       end
+#     end
    
-    #if just category is selected and school is specified 
+#     #if just category is selected and school is specified 
 
-    if (payload['category'] =! nil && payload['sub_category'] == nil && payload['title'] == nil && payload['school_id'] != nil) 
+#     if (payload['category'] =! nil && payload['sub_category'] == nil && payload['title'] == nil && payload['school_id'] != nil) 
   
-      Reviewableobject.where(:school_id == payload['school_id']).each do |row|
-       if(payload['category'] == row.category)  
+#       Reviewableobject.where(:school_id == payload['school_id']).each do |row|
+#        if(payload['category'] == row.category)  
 
-         hash = {:reviewablesID => row.reviewableID, :reviewableName =>row.reviewableName, :coordinates => row.coordinates}
-         returnVal.push(hash)
-        end
-      end
-    end
+#          hash = {:reviewablesID => row.reviewableID, :reviewableName =>row.reviewableName, :coordinates => row.coordinates}
+#          returnVal.push(hash)
+#         end
+#       end
+#     end
    
-    #if category and sub_category are selected and no school NOT TESTED
+#     #if category and sub_category are selected and no school NOT TESTED
 
-    if (payload['category'] =! nil && payload['sub_category'] =! nil && payload['title'] == nil && payload['school_id'] == nil) 
+#     if (payload['category'] =! nil && payload['sub_category'] =! nil && payload['title'] == nil && payload['school_id'] == nil) 
       
-      Reviewableobject.where(:category== payload['category']).each do |row|
-       if(payload['sub_category'] == row.sub_category)  
+#       Reviewableobject.where(:category== payload['category']).each do |row|
+#        if(payload['sub_category'] == row.sub_category)  
 
-         hash = {:reviewablesID => row.reviewableID, :reviewableName =>row.reviewableName, :coordinates => row.coordinates}
+#          hash = {:reviewablesID => row.reviewableID, :reviewableName =>row.reviewableName, :coordinates => row.coordinates}
 
-         returnVal.push(hash)
-        end
-      end
-    end
+#          returnVal.push(hash)
+#         end
+#       end
+#     end
 
-    #if category and sub_category is selected and school is specified DONE, NOT TEST
+#     #if category and sub_category is selected and school is specified DONE, NOT TEST
 
-    if (payload['category'] =! nil && payload['sub_category'] =! nil && payload['title'] == nil && payload['school_id'] != nil) 
-      Reviewableobject.where(:school_id == payload['school_id']).each do |row|
-       if(payload['category'] == row.category)  
-        if(payload['sub_category'] == row.sub_category)
+#     if (payload['category'] =! nil && payload['sub_category'] =! nil && payload['title'] == nil && payload['school_id'] != nil) 
+#       Reviewableobject.where(:school_id == payload['school_id']).each do |row|
+#        if(payload['category'] == row.category)  
+#         if(payload['sub_category'] == row.sub_category)
 
-         hash = {:reviewablesID => row.reviewableID, :reviewableName =>row.reviewableName, :coordinates => row.coordinates}
-         returnVal.push(hash)
-        end
-       end
-      end
-    end
+#          hash = {:reviewablesID => row.reviewableID, :reviewableName =>row.reviewableName, :coordinates => row.coordinates}
+#          returnVal.push(hash)
+#         end
+#        end
+#       end
+#     end
      
-    #if category and sub_category is selected and a school isnt selected 
+#     #if category and sub_category is selected and a school isnt selected 
 
-    if (payload['category'] =! nil && payload['sub_category'] =! nil && payload['title'] == nil && payload['school_id'] == nil) 
-      Reviewableobject.where(:category== payload['category']).each do |row|
-        if(payload['sub_category'] == row.sub_category)  
+#     if (payload['category'] =! nil && payload['sub_category'] =! nil && payload['title'] == nil && payload['school_id'] == nil) 
+#       Reviewableobject.where(:category== payload['category']).each do |row|
+#         if(payload['sub_category'] == row.sub_category)  
 
-          hash = {:reviewablesID => row.reviewableID, :reviewableName =>row.reviewableName, :coordinates => row.coordinates}
+#           hash = {:reviewablesID => row.reviewableID, :reviewableName =>row.reviewableName, :coordinates => row.coordinates}
 
-          returnVal.push(hash)
-        end
-      end
-    end
-    #if category and title is selected and a school isnt selected 
+#           returnVal.push(hash)
+#         end
+#       end
+#     end
+#     #if category and title is selected and a school isnt selected 
 
-    if (payload['category'] =! nil && payload['sub_category'] == nil && payload['title'] =! nil && payload['school_id'] == nil) 
+#     if (payload['category'] =! nil && payload['sub_category'] == nil && payload['title'] =! nil && payload['school_id'] == nil) 
       
-      Reviewableobject.where(:reviewName == (payload['title']) ).each do |row|
-       if(payload['category'] == row.category)  
+#       Reviewableobject.where(:reviewName == (payload['title']) ).each do |row|
+#        if(payload['category'] == row.category)  
 
-         hash = {:reviewablesID => row.reviewableID, :reviewableName =>row.reviewableName, :coordinates => row.coordinates}
+#          hash = {:reviewablesID => row.reviewableID, :reviewableName =>row.reviewableName, :coordinates => row.coordinates}
  
-         returnVal.push(hash)
-        end
-      end
-    end
+#          returnVal.push(hash)
+#         end
+#       end
+#     end
 
-      #if category and title is selected and school is specified DONE, NOT TEST
+#       #if category and title is selected and school is specified DONE, NOT TEST
 
-    if (payload['category'] =! nil && payload['sub_category'] =! nil && payload['title'] == nil && payload['school_id'] != nil) 
-        Reviewableobject.where(:school_id == payload['school_id']).each do |row|
-         if(payload['title'] == row.reviewableName)  
-          if(payload['category'] == row.category)
+#     if (payload['category'] =! nil && payload['sub_category'] =! nil && payload['title'] == nil && payload['school_id'] != nil) 
+#         Reviewableobject.where(:school_id == payload['school_id']).each do |row|
+#          if(payload['title'] == row.reviewableName)  
+#           if(payload['category'] == row.category)
 
-           hash = {:reviewablesID => row.reviewableID, :reviewableName =>row.reviewableName, :coordinates => row.coordinates}
+#            hash = {:reviewablesID => row.reviewableID, :reviewableName =>row.reviewableName, :coordinates => row.coordinates}
   
-           returnVal.push(hash)
-          end
-         end
-       end
-      end
+#            returnVal.push(hash)
+#           end
+#          end
+#        end
+#       end
       
 
-        #if category, sub category, and title is selected and school is specified
-        if (payload['category'] =! nil && payload['sub_category'] =! nil && payload['title'] == nil && payload['school_id'] != nil) 
-          Reviewableobject.where(:school_id == payload['school_id']).each do |row|
-           if(payload['title'] == row.reviewableName)  
-            if(payload['category'] == row.category)
-              if(payload['sub_category'] == row.sub_category)
+#         #if category, sub category, and title is selected and school is specified
+#         if (payload['category'] =! nil && payload['sub_category'] =! nil && payload['title'] == nil && payload['school_id'] != nil) 
+#           Reviewableobject.where(:school_id == payload['school_id']).each do |row|
+#            if(payload['title'] == row.reviewableName)  
+#             if(payload['category'] == row.category)
+#               if(payload['sub_category'] == row.sub_category)
 
-               hash = {:reviewablesID => row.reviewableID, :reviewableName =>row.reviewableName, :coordinates => row.coordinates}
+#                hash = {:reviewablesID => row.reviewableID, :reviewableName =>row.reviewableName, :coordinates => row.coordinates}
     
-               returnVal.push(hash)
-              end
-            end
-           end
-          end
-        end
+#                returnVal.push(hash)
+#               end
+#             end
+#            end
+#           end
+#         end
         
-   #all pins for a title DONE, NOT TESTED
+#    #all pins for a title DONE, NOT TESTED
 
-   if (payload['category'] == nil && payload['sub_category'] == nil && payload['title'] == nil && payload['school_id'] != nil) 
+#    if (payload['category'] == nil && payload['sub_category'] == nil && payload['title'] == nil && payload['school_id'] != nil) 
 
     
-      Reviewableobject.where(:reviewableName => payload['title']).each do |row|
-        hash = {:reviewablesID => row.reviewableID, :reviewableName =>row.reviewablesName, :coordinates => row.coordinates}
-        returnVal.push(hash)
-      end
+#       Reviewableobject.where(:reviewableName => payload['title']).each do |row|
+#         hash = {:reviewablesID => row.reviewableID, :reviewableName =>row.reviewablesName, :coordinates => row.coordinates}
+#         returnVal.push(hash)
+#       end
   
-    end
+#     end
    
     
- #if title and school NOT TESTED
- if (payload['category'] =! nil && payload['sub_category'] =! nil && payload['title'] == nil && payload['school_id'] == nil)  
-  Reviewableobject.where(:reviewableName == payload['category']).each do |row|
-   if(payload['sub_category'] == row.sub_category)  
+#  #if title and school NOT TESTED
+#  if (payload['category'] =! nil && payload['sub_category'] =! nil && payload['title'] == nil && payload['school_id'] == nil)  
+#   Reviewableobject.where(:reviewableName == payload['category']).each do |row|
+#    if(payload['sub_category'] == row.sub_category)  
 
-      hash = {:reviewablesID => row.reviewableID, :reviewableName =>row.reviewableName, :coordinates => row.coordinates}
+#       hash = {:reviewablesID => row.reviewableID, :reviewableName =>row.reviewableName, :coordinates => row.coordinates}
 
-       returnVal.push(hash)
-      end
-    end
-  end
-    
-  content_type :json
-    { pins: returnVal }.to_json
-end
+#        returnVal.push(hash)
+#       end
+#     end
+#   end
+
+#   content_type :json
+#     { pins: returnVal }.to_json
+# end
 
 
 end
