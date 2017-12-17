@@ -20,8 +20,7 @@ export class PracticeComp extends React.Component {
 		this.menuArrowClicked = this.menuArrowClicked.bind(this);
 	}
 
-	menuArrowClicked(string)
-	{
+	menuArrowClicked(string) {
 		console.log(string.target.id);
 
 		let array=this.state.menuArrowArr;
@@ -43,6 +42,7 @@ export class PracticeComp extends React.Component {
 		if (this.state.menuArrowArr.includes("Buildings"))
 		{
 			return(
+				<div>
 					<h3 className="menuItem2">
 						<label className="container2" for="XXXstring" >
 		  				<input type="checkbox" name="XXXstring" defaultChecked="checked" />
@@ -50,36 +50,41 @@ export class PracticeComp extends React.Component {
 							<span className="mapMenuText2">DSC</span>
 						</label>
 						<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow2" id="DSC" onClick={(event) => this.menuArrowClicked(event)} />
-						{this.renderShit()}
 					</h3>
+					{this.renderShit()}
+				</div>
 			)
 		}
 	}
 
 	renderShit() {
 		return (
-			<h4>
-				<label className="container3" for="XXXstring" >
-					<input type="checkbox" name="XXXstring" defaultChecked="checked" />
-					<span className="checkmark"></span>
-					<span className="mapMenuText3">Floor 1</span>
-				</label>
-				<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow3" id="Floor 1" onClick={(event) => this.menuArrowClicked(event)} />
+			<div>
+				<h4 className="menuItem3">
+					<label className="container3" for="XXXstring" >
+						<input type="checkbox" name="XXXstring" defaultChecked="checked" />
+						<span className="checkmark"></span>
+						<span className="mapMenuText3">Floor 1</span>
+					</label>
+					<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow3" id="Floor 1" onClick={(event) => this.menuArrowClicked(event)} />
+				</h4>
 				{this.renderMoreShit()}
-			</h4>
+			</div>
 		)
 	}
 
 	renderMoreShit() {
 		return (
-			<h5>
-				<label className="container4" for="XXXstring" >
-					<input type="checkbox" name="XXXstring" defaultChecked="checked" />
-					<span className="checkmark"></span>
-					<span className="mapMenuText4">DSC 199</span>
-				</label>
-				<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow4" id="DSC 199" onClick={(event) => this.menuArrowClicked(event)} />
-			</h5>
+			<div>
+				<h5 className="menuItem4">
+					<label className="container4" for="XXXstring" >
+						<input type="checkbox" name="XXXstring" defaultChecked="checked" />
+						<span className="checkmark"></span>
+						<span className="mapMenuText4">DSC 199</span>
+					</label>
+					<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow4" id="DSC 199" onClick={(event) => this.menuArrowClicked(event)} />
+				</h5>
+			</div>
 		)
 	}
 
@@ -107,7 +112,7 @@ export class PracticeComp extends React.Component {
 						<label className="container2" for="XXXstring" >
 		  				<input type="checkbox" name="XXXstring" defaultChecked="checked" />
 		  				<span className="checkmark"></span>
-							<span className="mapMenuText2">That one fucking botch who i hate with a passion</span>
+							<span className="mapMenuText2">Logan</span>
 						</label>
 						<img src="closemenu.png" alt="arrow" height="42" width="42" className="mapMenuArrow2" id="Logan" onClick={(event) => this.menuArrowClicked(event)} />
 					</h3>
