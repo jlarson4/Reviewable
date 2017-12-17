@@ -8,7 +8,7 @@ body{
 }
 
 .mapContainer{
-	width:78%;
+	width:80%;
 	float: right;
 	display: inline-block;
 
@@ -116,16 +116,17 @@ button, .btn {
 	vertical-align: top;
 
 	background-color: #a7a8a6;
-	padding: 10px;
 }
 
 .mapMenuSearchBar{
+	padding: 10px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 }
 
 .mapMenuButton{
+	padding-top: 10px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -151,25 +152,19 @@ button, .btn {
 }
 
 .menuItem{
-	border: 2px solid #605f5f;
-	/*background-color: #a7a8a6;*/
-	/*padding: 10px;*/
+	border-bottom: 2px solid #605f5f;
+	padding: 0 10px;
+	margin:0;
 }
 
-.menuItem2{
-	border: 2px solid #605f5f;
+.menuItem2, .menuItem3, .menuItem4{
+	border-bottom: 2px solid #605f5f;
 	background-color: #c5c6c4;
-	/*padding: 10px;*/
-}
-.menuItem3{
-	border: 2px solid #605f5f;
-	background-color: #c5c6c4;
-	/*padding: 10px;*/
+	padding: 5px 10px;
+	margin:0;
 }
 .menuItem4{
-	border: 2px solid #605f5f;
-	background-color: #c5c6c4;
-	/*padding: 10px;*/
+	padding: 10px;
 }
 
 /* Customize the label (the container) */
@@ -605,7 +600,7 @@ span.error, p.error{
 }
 .profile-settings-div{
 	float:right;
-	padding-top: 10px;
+	padding: 10px 10px 0 0;
 }
 #school-select{
 	width: 100%;
