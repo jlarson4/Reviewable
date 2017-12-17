@@ -11,16 +11,9 @@ export class PracticeComp extends React.Component {
 		super(props)
 		this.state = {
 			menuArrowArr: [],
-			buildings: [
-				{name: 'Bathroom 1a', reviewableID: 0, sub_category: 'David Straz Center', reviewable_description: 'david-straz-center-1'}, 
-				{name: 'Bathroom 2a', reviewableID: 0, sub_category: 'David Straz Center', reviewable_description: 'david-straz-center-2'}, 
-				{name: 'Bathroom 3a', reviewableID: 0, sub_category: 'David Straz Center', reviewable_description: 'david-straz-center-2'}, 
-				{name: 'Bathroom 1a', reviewableID: 0, sub_category: 'Lentz Hall', reviewable_description: 'lentz-hall-1'}, 
-				{name: 'Bathroom 2a', reviewableID: 0, sub_category: 'Lentz Hall', reviewable_description: 'lentz-hall-1'}, 
-				{name: 'Bathroom 3a', reviewableID: 0, sub_category: 'Lentz Hall', reviewable_description: 'lentz-hall-2'}, 
-			],
-			classes: [{name: 'Class 1', reviewableID: 0}, {name: 'Class 2', reviewableID: 1}],
-			people: [{name: 'Mahoney', reviewableID: 0, sub_category: 'professor'}, {name: 'Bob', reviewableID: 1, sub_category: 'student'}, {name: 'Bill', reviewableID: 1, sub_category: 'student'}],
+			buildings: [],
+			classes: [],
+			people: [],
 			userModal: false,
 			reviewModal: false
 		};
@@ -28,6 +21,56 @@ export class PracticeComp extends React.Component {
 		this.renderClassesSubMenu = this.renderClassesSubMenu.bind(this);
 		this.renderPeopleSubMenu = this.renderPeopleSubMenu.bind(this);
 		this.menuArrowClicked = this.menuArrowClicked.bind(this);
+	}
+
+	componentDidMount() {
+		let categories = {
+			category: 'Building',
+			school_id: 1
+
+		}
+		let data = JSON.stringify( categories );
+		fetch('./getCategory', {
+			method: 'POST',
+			body: data
+		}).then(function(response: any){
+			response.json().then(function(result: any){
+				console.log(result)
+				this.setState({buildings: result['reviewables']})
+			}.bind(this))
+		}.bind(this))
+
+		categories = {
+			category: 'person',
+			school_id: 1
+
+		}
+		data = JSON.stringify( categories );
+		fetch('./getCategory', {
+			method: 'POST',
+			body: data
+		}).then(function(response: any){
+			response.json().then(function(result: any){
+				console.log(result)
+				this.setState({people: result['reviewables']})
+			}.bind(this))
+		}.bind(this))
+
+		categories = {
+			category: 'Class',
+			school_id: 1
+
+		}
+		data = JSON.stringify( categories );
+		fetch('./getCategory', {
+			method: 'POST',
+			body: data
+		}).then(function(response: any){
+			response.json().then(function(result: any){
+				console.log(result)
+				this.setState({classes: result['reviewables']})
+			}.bind(this))
+		}.bind(this))
 	}
 
 	menuArrowClicked(string) {
