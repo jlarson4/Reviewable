@@ -114,7 +114,7 @@ button, .btn {
 	height: 100%;
 	display: inline-block;
 	vertical-align: top;
-
+	overflow: auto;
 	background-color: #a7a8a6;
 }
 
@@ -673,7 +673,7 @@ span.error, p.error{
 
 ::-webkit-scrollbar-thumb {
     border-radius: 8px;
-    background-color: #aaaaaa;
+    background-color: #999999;
 }
 
 ::-webkit-scrollbar-track {

@@ -141,7 +141,7 @@ post '/addReview' do
   puts
   puts
 
-  Review.create(:reviewablesID => payload['reviewableID'], :reviewText => payload['review'], :rating => payload['rating'], :username => payload['username'])
+  Review.create(:reviewablesID => payload['reviewableID'], :reviewText => payload['review'], :rating => payload['rating'], :username => payload['username'], :upvotesTotal => 0, :downvotesTotal => 0)
 
   content_type :json
   { add_review: "" }.to_json
@@ -211,15 +211,25 @@ post '/vote' do
     puts "/vote SUCCESS"
   
     payload = JSON.parse(request.body.read)
+    puts payload
   
     if Review.where(:reviewID => payload['reviewID'].empty? == false)
       if payload['votetype'] > 0
-
-        Review.where(:reviewID => payload['reviewID']).update(:upvotesTotal => :upvotesTotal + 1)
+        review = Review.where(:reviewID => payload['reviewID'])
+        temp = review.get(:upvotesTotal)
+        if temp == nil
+          temp = 0
+        end
+        review.update(:upvotesTotal =>  temp + 1)
 
       else
-
-        Review.where(:reviewID => payload['reviewID']).update(:downvotesTotal => :downvotesTotal + 1)   
+        review = Review.where(:reviewID => payload['reviewID'])
+        temp = review.get(:downvotesTotal)
+        if temp == nil
+          temp = 0
+        end
+        review = Review.where(:reviewID => payload['reviewID'])
+        review.update(:downvotesTotal => temp + 1)   
       end
     end
 
@@ -377,7 +387,7 @@ post '/getSingleSchool' do
   end
 
   content_type :json
-  { schoolCoordinates: school.schoolCoordinates }.to_json
+  { schoolCoordinates: school.get(:schoolCoordinates) }.to_json
 
 end
 

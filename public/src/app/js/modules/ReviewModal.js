@@ -59,7 +59,7 @@ export class ReviewModal extends React.Component {
 							{this.getClickableRatingsGraphic(this.state.newRatingTemp, '')}
 						</div>
 						<div className="new-rating-submit">
-							<a className='btn' onClick={this.toggleReviewForm.bind(this)}>Submit</a>
+							<a className='btn' onClick={this.submitReview.bind(this)}>Submit</a>
 							<a className='cancel new-rating-cancel' onClick={this.toggleReviewForm.bind(this)}>Cancel</a>
 						</div>
 					</div>
@@ -115,7 +115,7 @@ export class ReviewModal extends React.Component {
 			options.push(<option value="" key={"buidling-" + -1}>Select</option>);
 			let reviewables = this.props.reviews;
 			for(let i = 0; i < reviewables.length; i++) {
-				options.push(<option value={reviewables[i]['title'] + "-" + reviewables[i]['id']} key={"school-" + reviewables[i]['id']}>{reviewables[i]['title']}</option>);
+				options.push(<option value={reviewables[i]['name'] + "-" + reviewables[i]['reviewableID']} key={"school-" + reviewables[i]['reviewableID']}>{reviewables[i]['name']}</option>);
 			}
 			options.push(<option value="new" key={"buidling-" + -2}>Add New Reviewable</option>);
 			return (
@@ -279,10 +279,14 @@ export class ReviewModal extends React.Component {
 		let r = ''; //description
 
 		if(c == 'building') {
+			c = c.split('-')[0];
 			sub = document.getElementById('building-select').value;
-			r = document.getElementById('building-select').value.replace(/ /g, "-") + '-' + document.getElementById('floor-number').value;
+			r = document.getElementById('building-select').value.replace(/ /g, "-");
 		} else if (c == 'person') {
 			sub = document.getElementById('person-select').value;
+			if(sub == 'new') {
+				sub = document.getElementById('category').value;
+			}
 		}
 		//sends in the new reviewable and loads review form for that reviewable
 		let categories = {
@@ -291,7 +295,8 @@ export class ReviewModal extends React.Component {
 			username: u,
 			category: c,
 			subCategory: sub,
-			reviewableDescription: r
+			reviewableDescription: r,
+			school_id: this.props.school_id
 		}
 		let data = JSON.stringify( categories );
 		fetch('./addReviewable', {
@@ -299,8 +304,7 @@ export class ReviewModal extends React.Component {
 			body: data
 		}).then(function(response: any){
 			response.json().then(function(result: any){
-				console.log(result)
-				this.setState({newReviewable: false, reviewableID: 0, reviewableTitle: result['reviewableID']});
+				this.setState({newReviewable: false, reviewableID: result['reviewableID'], reviewableTitle: t});
 				this.setState({createReview: true});
 			}.bind(this))
 		}.bind(this))
@@ -315,6 +319,7 @@ export class ReviewModal extends React.Component {
 			rating: this.state.newRating,
 			username: this.props.username
 		}
+		console.log(categories)
 		let data = JSON.stringify( categories );
 		fetch('./addReview', {
 			method: 'POST',
@@ -324,7 +329,6 @@ export class ReviewModal extends React.Component {
 				this.setState({createReview: false})
 			}.bind(this))
 		}.bind(this))
-		this.setState({createReview: false})
 	}
 	
 	getBuildingOptions(){

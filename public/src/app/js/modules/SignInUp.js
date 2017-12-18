@@ -169,7 +169,6 @@ export class SignInUp extends React.Component {
 		if(this.state.buildings.length == 0){
 			return(<h5 key="1">No Buildings Have Been Added</h5>);
 		} else {
-			console.log(this.state.buildings)
 			let b = []
 			for(let i = 0; i < this.state.buildings.length; i++) {
 				b.push(
@@ -249,7 +248,6 @@ export class SignInUp extends React.Component {
 				body: data
 			}).then(function(response: any){
 				response.json().then(function(result: any){
-					console.log(result)
 				}.bind(this))
 			}.bind(this))	
 		}
@@ -278,7 +276,6 @@ export class SignInUp extends React.Component {
 
 	deleteBuilding(event){
 		let n = event.target.getAttribute('data-name');
-		console.log(n);
 		let temp = [];
 		for(let i = 0; i < this.state.buildings.length; i++) {
 			//do an ajax call to the server for each building in the array
@@ -286,7 +283,6 @@ export class SignInUp extends React.Component {
 				temp.push(this.state.buildings[i]);
 			}
 		}
-		console.log(temp)
 		this.setState({buildings: temp});
 	}
 
@@ -302,7 +298,6 @@ export class SignInUp extends React.Component {
 				body: data
 			}).then(function(response: any){
 				response.json().then(function(result: any){
-					console.log(result)
 					this.setState({schools: result['schools']});
 				}.bind(this))
 			}.bind(this))
@@ -408,8 +403,7 @@ export class SignInUp extends React.Component {
 		}).then(function(response: any){
 			response.json().then(function(result: any){
 				if(result['signed_up']){
-					console.log(result)
-					this.props.function_pointer(true, 'Test', result['school_id']);
+					this.props.function_pointer(true, u, result['schoolID']);
 				} else {
 					$('#signInError').text("Incorrect Username or Password, retry");
 				}

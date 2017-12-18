@@ -7,13 +7,17 @@ const velocity = require('velocity-react');
 export class ReviewableModal extends React.Component {
 	constructor(props) {
 		super(props)
-		let t = this.getAverageRating();
 		this.state = {
-			averageRating: t,
-			newRating: t,
-			newRatingTemp: t,
-			createReview: false
+			averageRating: 1,
+			newRating: 1,
+			newRatingTemp: 1,
+			createReview: false,
+			reviews: []
 		}
+	}
+
+	componentDidMount(){
+		this.requestReviewsFromServer(this.props.reviewableID);
 	}
 
 	render() {
@@ -24,7 +28,7 @@ export class ReviewableModal extends React.Component {
 					<div className="modalHeader">
 						<span className='modalHeadline'> {this.props.title} </span>
 						<div className='rating-stars'>
-							{this.getRatingsGraphic(this.state.averageRating, '')}
+							{this.getRatingsGraphic(this.getAverageRating(), '')}
 						</div>
 						<a className="modal-close" onClick={this.props.handleClick}>
 						</a>
@@ -36,6 +40,22 @@ export class ReviewableModal extends React.Component {
 				</div>
 			</div> 
 		);
+	}
+
+	requestReviewsFromServer(id){
+		let categories = {
+			reviewableID: id
+
+		}
+		let data = JSON.stringify( categories );
+		fetch('/getReviews', {
+			method: 'POST',
+			body: data
+		}).then(function(response: any){
+			response.json().then(function(result: any){
+				this.setState({reviews: result['reviews']});
+			}.bind(this))
+		}.bind(this))
 	}
 
 	renderReviewData(){
@@ -100,9 +120,9 @@ export class ReviewableModal extends React.Component {
 
 	renderReviews(){
 		let reviews = [];
-		for(let i = 0; i < this.props.reviews.length; i++) {
+		for(let i = 0; i < this.state.reviews.length; i++) {
 			//build JSX review object
-			let reviewRating = this.props.reviews[i]['up_votes'] - this.props.reviews[i]['down_votes'];
+			let reviewRating = this.state.reviews[i]['up_votes'] - this.state.reviews[i]['down_votes'];
 			let reviewRatingClass = '';
 			if(reviewRating > 0){
 				reviewRatingClass = 'green';
@@ -111,14 +131,14 @@ export class ReviewableModal extends React.Component {
 			}
 			reviews.push(
 				<div className='single-review' key={'review-' + i}>
-					<h3 className='user-header'>{this.props.reviews[i]['username']} says: </h3>
-					<p className='review-text'>"{this.props.reviews[i]['review']}"</p>
+					<h3 className='user-header'>{this.state.reviews[i]['username']} says: </h3>
+					<p className='review-text'>"{this.state.reviews[i]['review']}"</p>
 					<span className='review-rating'>Was this review helpful? 
-						<span className='review-rating-option' id={'reviewUp-' + this.props.reviews[i]['id']} onClick={(event) => this.eventUpVote(event)}> Yes </span> 
-						<span className='review-rating-option' id={'reviewDown-' + this.props.reviews[i]['id']} onClick={(event) => this.eventDownVote(event)}>No </span> 
+						<span className='review-rating-option' id={'reviewUp-' + this.state.reviews[i]['reviewID']} onClick={(event) => this.eventUpVote(event)}> Yes </span> 
+						<span className='review-rating-option' id={'reviewDown-' + this.state.reviews[i]['reviewID']} onClick={(event) => this.eventDownVote(event)}>No </span> 
 						<span className={'reviewRating ' + reviewRatingClass}>({reviewRating})</span>
 						<span className='mini-rating'>
-							{this.getRatingsGraphic(this.props.reviews[i]['rating'], 'mini-graphic')}
+							{this.getRatingsGraphic(this.state.reviews[i]['rating'], 'mini-graphic')}
 						</span>
 					</span>
 
@@ -126,7 +146,7 @@ export class ReviewableModal extends React.Component {
 			);
 
 		}
-		if(this.props.reviews.length == 0) {
+		if(this.state.reviews.length == 0) {
 			reviews.push(
 				<div className='single-review' key={'review-' + 1}>
 					<h3 className='user-header'>No Reviews Available</h3>
@@ -138,10 +158,12 @@ export class ReviewableModal extends React.Component {
 
 	getAverageRating(){
 		let temp = 0;
-		for(let i = 0; i < this.props.reviews.length; i++) {
-			temp += this.props.reviews[i]['rating'];
+		if(this.state.reviews != null) {
+			for(let i = 0; i < this.state.reviews.length; i++) {
+				temp += this.state.reviews[i]['rating'];
+			}
+			temp = temp / this.state.reviews.length;
 		}
-		temp = temp / this.props.reviews.length;
 		return temp;
 	}
 	eventUpVote(event){

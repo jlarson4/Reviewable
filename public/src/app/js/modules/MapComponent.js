@@ -16,8 +16,8 @@ export class MapComponent extends React.Component {
 			activeMarker: -1,
 			markers: this.props.marker_info,
 			markerTitle: '',
-			markerID: 0,
-			reviews: []
+			reviews: [],
+			map: null
 		}
 	}
 
@@ -32,12 +32,15 @@ export class MapComponent extends React.Component {
 		}.bind(this));
 	}
 
-	loadMap(){
-		buildMap('map', this.props.lat, this.props.long, this.props.zoom, this.props.marker_info);	
-	}
-
 	render() {
-		let modal = [];
+		if(this.state.map != null) {
+			for (var i = 0; i < this.markers.length; i++ ) {
+				this.markers[i].setMap(null);
+			}
+  			this.markers.length = 0;
+			this.marker_info = this.props.marker_info;
+			this.initMarkers(this.state.map)
+		}
 		
 		return (
 			<div className="mapContainer">
@@ -54,46 +57,9 @@ export class MapComponent extends React.Component {
 
 	renderModal() {
 		if(this.state.markerClicked){
-			this.requestReviewsFromServer();
 			let props = {
-				reviews: this.state.reviews,
-				// [
-				// 	{
-				// 		id: 0,
-				// 		rating: 1,
-				// 		username: 'Test',
-				// 		up_votes: 10,
-				// 		down_votes: 4,
-				// 		review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-				// 	},
-				// 	{
-				// 		id: 1,
-				// 		rating: 3,
-				// 		username: 'Test',
-				// 		up_votes: 15,
-				// 		down_votes: 37,
-				// 		review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-				// 	},
-				// 	{
-				// 		id: 2,
-				// 		rating: 2,
-				// 		username: 'Test',
-				// 		up_votes: 20,
-				// 		down_votes: 2,
-				// 		review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-				// 	},
-				// 	{
-				// 		id: 3,
-				// 		rating: 2,
-				// 		username: 'Test',
-				// 		up_votes: 20,
-				// 		down_votes: 2,
-				// 		review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-				// 	},
-
-				// ],
 				title: this.state.markerTitle,
-				reviewableID: this.state.markerID,
+				reviewableID: this.state.activeMarker,
 				username: this.props.username,
 				handleClick: this.closeModal.bind(this)
 			}; 
@@ -150,6 +116,8 @@ export class MapComponent extends React.Component {
 			zoom: this.zoom,
 			styles: myStyles
 		});
+
+		this.setState({map: map});
 		
 		this.initMarkers(map);
 
@@ -162,10 +130,10 @@ export class MapComponent extends React.Component {
 		for(let i = 0; i < this.marker_info.length; i++)
 		{
 			let mark = this.marker_info[i];
-			let lat = mark.lat;
-			let lng = mark.long;
+			let lat = parseFloat(mark['coordinates'].split('/')[0]);
+			let lng = parseFloat(mark['coordinates'].split('/')[1]);
 			let infowindow = new google.maps.InfoWindow({
-				content: '<h5 data-id="' + mark['id'] + '">' + mark['title'] + '</h5>'
+				content: '<h5 data-id="' + mark['reviewableID'] + '">' + mark['name'] + '</h5>'
 			});
 			let marker = null;
 			if(mark.hasOwnProperty('mark') && mark['mark'] != '')
@@ -174,19 +142,19 @@ export class MapComponent extends React.Component {
 					position: {lat , lng },
 					map: map,
 					icon: mark['mark'], 
-					title: mark['title'],
-					reviewableID: mark['id']
+					title: mark['name'],
+					reviewableID: mark['reviewableID']
 				});
 			} else {
 				marker = new google.maps.Marker({
 					position: {lat , lng },
 					map: map,
-					reviewableTitle: mark['title'],
-					reviewableID: mark['id']
+					reviewableTitle: mark['name'],
+					reviewableID: mark['reviewableID']
 				});
 			}
 			google.maps.event.addListener(marker, 'click', function() {
-				this.setState({markerClicked: true, activeMarker: 1, markerTitle: marker['reviewableTitle'], markerID: marker['reviewableID']});
+				this.setState({markerClicked: true, activeMarker: marker['reviewableID'], markerTitle: marker['reviewableTitle']});
 				jQuery('#reviewable-modal').toggleClass('active');
 			}.bind(this));
 			google.maps.event.addListener(marker, 'mouseover',  function() {
@@ -203,22 +171,5 @@ export class MapComponent extends React.Component {
 	closeModal(){
 		this.setState({markerClicked: false, activeMarker: -1});
 		jQuery('#reviewable-modal').toggleClass('active');
-	}
-
-	requestReviewsFromServer(){
-		let categories = {
-			reviewableID: this.state.activeMarker
-
-		}
-		let data = JSON.stringify( categories );
-		fetch('/getReviews', {
-			method: 'POST',
-			body: data
-		}).then(function(response: any){
-			response.json().then(function(result: any){
-				console.log(result);
-				this.setState({reviews: result['reviews']});
-			}.bind(this))
-		}.bind(this))
 	}
 }
