@@ -115,7 +115,7 @@ button, .btn {
 	display: inline-block;
 	vertical-align: top;
 	overflow: auto;
-	background-color: #a7a8a6;
+	background-color: #cecece;
 }
 
 .mapMenuSearchBar{
@@ -159,7 +159,7 @@ button, .btn {
 
 .menuItem2, .menuItem3, .menuItem4{
 	border-bottom: 2px solid #605f5f;
-	background-color: #c5c6c4;
+	background-color: #dddddd;
 	padding: 5px 10px;
 	margin:0;
 }
