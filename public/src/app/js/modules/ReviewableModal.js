@@ -173,13 +173,13 @@ export class ReviewableModal extends React.Component {
 			votetype: 1
 		}
 		let data = JSON.stringify( categories );
-		console.log(data);
+	
 		fetch('./vote', {
 			method: 'POST',
 			body: data
 		}).then(function(response: any){
 			response.json().then(function(result: any){
-				console.log(result);
+			
 			}.bind(this))
 		}.bind(this))
 	}
@@ -190,13 +190,13 @@ export class ReviewableModal extends React.Component {
 			votetype: -1
 		}
 		let data = JSON.stringify( categories );
-		console.log(data);
+	
 		fetch('./vote', {
 			method: 'POST',
 			body: data
 		}).then(function(response: any){
 			response.json().then(function(result: any){
-				console.log(result);
+			
 			}.bind(this))
 		}.bind(this))
 	}
@@ -233,7 +233,7 @@ export class ReviewableModal extends React.Component {
 			body: data
 		}).then(function(response: any){
 			response.json().then(function(result: any){
-				console.log(result);
+			
 				this.setState({createReview: false})
 			}.bind(this))
 		}.bind(this))

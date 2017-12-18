@@ -21,10 +21,17 @@ export class ReviewModal extends React.Component {
 			numFloors: 1,
 			height: 25,
 			width: 30,
-			margin: 35
+			margin: 35,
+			buildingOptions: [],
+			roleOptions: []
 		}
 
 		
+	}
+
+	componentDidMount(){
+		this.getBuildingOptions();
+		this.getRoleOptions();
 	}
 
 	render() {
@@ -112,12 +119,12 @@ export class ReviewModal extends React.Component {
 	renderSelectOptions(){
 		if(!this.state.newReviewable && !this.state.createReview){
 			let options = [];
-			options.push(<option value="" key={"buidling-" + -1}>Select</option>);
+			options.push(<option value="" key={"building-" + -1}>Select</option>);
 			let reviewables = this.props.reviews;
 			for(let i = 0; i < reviewables.length; i++) {
 				options.push(<option value={reviewables[i]['name'] + "-" + reviewables[i]['reviewableID']} key={"school-" + reviewables[i]['reviewableID']}>{reviewables[i]['name']}</option>);
 			}
-			options.push(<option value="new" key={"buidling-" + -2}>Add New Reviewable</option>);
+			options.push(<option value="new" key={"building-" + -2}>Add New Reviewable</option>);
 			return (
 				<div>
 					<div className="modalHeader">
@@ -141,10 +148,10 @@ export class ReviewModal extends React.Component {
 	renderBuildingSelect(){
 		if(this.state.isBuilding){
 			let options = [];
-			options.push(<option value="" key={"buidling-" + -1}>Select</option>);
-			let reviewables = this.getBuildingOptions()
+			options.push(<option value="" key={"building-" + -1}>Select</option>);
+			let reviewables = this.state.buildingOptions;
 			for(let i = 0; i < reviewables.length; i++) {
-				options.push(<option value={reviewables[i]['building_name'] + "-" + reviewables[i]['noOfFloors']} key={i + reviewables[i]['noOfFloors']}>{reviewables[i]['building_name']}</option>);
+				options.push(<option value={reviewables[i]['building_name'] + "-" + reviewables[i]['noOfFloors']} key={reviewables[i]['building_id']}>{reviewables[i]['building_name']}</option>);
 			}
 			return (
 				<div>
@@ -163,12 +170,12 @@ export class ReviewModal extends React.Component {
 	renderPersonSelect(){
 		if(this.state.isPerson){
 			let options = [];
-			options.push(<option value="" key={"buidling-" + -1}>Select</option>);
-			let types = this.getRoleOptions();
+			options.push(<option value="" key={"building-" + -1}>Select</option>);
+			let types = this.state.roleOptions;
 			for(let i = 0; i < types.length; i++) {
-				options.push(<option value={types[i]} key={"buidling-" + i}>{types[i]}</option>);
+				options.push(<option value={types[i]} key={"building-" + i}>{types[i]}</option>);
 			}
-			options.push(<option value="new" key={"buidling-" + -2}>Add New Person Type</option>);
+			options.push(<option value="new" key={"building-" + -2}>Add New Person Type</option>);
 			return (
 				<div>
 					<h3 className='logSubHeader'><label htmlFor='person-select'> Select a Role </label></h3>
@@ -219,7 +226,6 @@ export class ReviewModal extends React.Component {
 
 	placeChange(){
 		let val = document.getElementById('building-select').value.split('-')[1];
-		console.log(val)
 		this.setState({numFloors: val})
 	}
 
@@ -319,7 +325,6 @@ export class ReviewModal extends React.Component {
 			rating: this.state.newRating,
 			username: this.props.username
 		}
-		console.log(categories)
 		let data = JSON.stringify( categories );
 		fetch('./addReview', {
 			method: 'POST',
@@ -333,12 +338,43 @@ export class ReviewModal extends React.Component {
 	
 	getBuildingOptions(){
 		//request school options from the server
-		console.log("Building Options Request Here");
-		return [{building_name: 'David A. Straz, Jr. Center', buidling_id: 0, noOfFloors: 1}, {building_name: 'Lentz Hall', buidling_id: 1, noOfFloors: 3}];
+		let categories = {
+			schoolID: this.props.school_id
+		}
+		let data = JSON.stringify( categories );
+		fetch('./getBuilding', {
+			method: 'POST',
+			body: data
+		}).then(function(response: any){
+			response.json().then(function(result: any){
+				this.setState({buildingOptions: result['buildings']})
+			}.bind(this))
+		}.bind(this))
+
 	}
 	getRoleOptions(){
 		//request role options from server
-		console.log("Role Options Request Here");
-		return ['Barista', 'Admin'];
+		let temp = []
+		let categories = {
+			category: 'person',
+			school_id: this.props.school_id
+
+		}
+		let data = JSON.stringify( categories );
+		fetch('./getCategory', {
+			method: 'POST',
+			body: data
+		}).then(function(response: any){
+			response.json().then(function(result: any){
+				let sub_categories = [];
+				for(let i = 0; i < result['reviewables'].length; i++) {
+					if(!sub_categories.includes(result['reviewables'][i]['sub_category'])) {
+						sub_categories.push(result['reviewables'][i]['sub_category']);
+					}
+				}
+				this.setState({roleOptions: sub_categories})
+			}.bind(this))
+		}.bind(this))
+		
 	}
 }

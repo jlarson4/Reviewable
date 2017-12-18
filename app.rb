@@ -358,6 +358,7 @@ post '/getBuilding' do
   puts "/getBuilding SUCCESS"
   
   payload = JSON.parse(request.body.read)
+  puts payload
 
   buildingList = Array.new()
 
