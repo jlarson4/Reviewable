@@ -152,14 +152,11 @@ post '/editReview' do
   
   puts "/editReview SUCCESS"
 
-  payload = JSON.parse(request.body.read)  
-
+  payload = JSON.parse(request.body.read)
+  
   review = Review.where(:reviewID => payload['reviewID'])
-
-  if review.empty? == false
-    review.update(:reviewText => payload['reviewText'])
-    review.update(:rating => payload['rating'])
-  end
+  review.update(:reviewText => payload['reviewText'])
+  review.update(:rating => payload['rating'])
 
   content_type :json
   { edit_review: "" }.to_json

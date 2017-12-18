@@ -10,12 +10,16 @@ export class UserModal extends React.Component {
 
 		this.state = {
 			editReview: -1,
-			reviews: this.getUserReviews(),
+			reviews: [],
 			newRating: 1,
 			newRatingTemp: 1
 		}
 
 		
+	}
+
+	componentDidMount(){
+		this.getUserReviews();
 	}
 
 	render() {
@@ -94,13 +98,13 @@ export class UserModal extends React.Component {
 	}
 
 	renderSingleReview(i){
-		if(this.state.reviews[i]['id'] != this.state.editReview){
+		if(this.state.reviews[i]['reviewID'] != this.state.editReview){
 			return (
 				<div className='single-review user-single-review'>
 					<p className='review-text'>"{this.state.reviews[i]['review']}"</p>
 					<span className='review-editing'>
-						<span className='review-edit-option' data-rating={this.state.reviews[i]['rating']} id={'review-edit-' + this.state.reviews[i]['id']} onClick={(event) => this.setEditReview(event)}>Edit </span> 
-						<span className='review-delete-option' id={'review-delete-' + this.state.reviews[i]['id']} onClick={(event) => this.deleteReview(event)}>Delete </span>
+						<span className='review-edit-option' data-rating={this.state.reviews[i]['rating']} id={'review-edit-' + this.state.reviews[i]['reviewID']} onClick={(event) => this.setEditReview(event)}>Edit </span> 
+						<span className='review-delete-option' id={'review-delete-' + this.state.reviews[i]['reviewID']} onClick={(event) => this.deleteReview(event)}>Delete </span>
 						<span className='mini-rating'>
 							{this.getRatingsGraphic(this.state.reviews[i]['rating'], 'mini-graphic')}
 						</span>
@@ -112,12 +116,12 @@ export class UserModal extends React.Component {
 
 	renderEditArea(i){
 		//renders a text area with the review and clickable graphic in place of regular text and edit option
-		if(this.state.reviews[i]['id'] == this.state.editReview){
+		if(this.state.reviews[i]['reviewID'] == this.state.editReview){
 			return (
 				<div className='single-review user-single-review editable-review'>
 					<textarea id="reviewable-textarea-input" className='editing-textarea' name='the-review' placeholder='Write a review...' rows='12' defaultValue={this.state.reviews[i]['review']}/>
 					<span className='review-editing'>
-						<span className='review-submit-option btn' id={'review-submit-' + this.state.reviews[i]['id']} onClick={(event) => this.submitEditedReview(event)}>Submit Changes</span>
+						<span className='review-submit-option btn' id={'review-submit-' + this.state.reviews[i]['reviewID']} onClick={(event) => this.submitEditedReview(event)}>Submit Changes</span>
 								<a className='cancel-edit btn' onClick={this.cancelEdit.bind(this)}>Cancel</a>
 						<span className='mini-rating'>
 							{this.getClickableRatingsGraphic(this.state.newRatingTemp, 'mini-graphic')}
@@ -134,15 +138,17 @@ export class UserModal extends React.Component {
 
 	setEditReview(event){
 		//set the states for editable review area
-		this.setState({editReview: event.target.id.split('-')[2]})
+		let split = event.target.id.split('-')
+		this.setState({editReview: split[split.length-1]})
 		this.setNewTempReviewRating(event);
 	}
 
 	submitEditedReview(){
 		let val = document.getElementById('reviewable-textarea-input').value;
+		let split = event.target.id.split('-')
 		let categories = {
-			reviewableID: this.props.reviewableID,
-			review: val,
+			reviewID: split[split.length-1],
+			reviewText: val,
 			rating: this.state.newRating,
 			username: this.props.username
 		}
@@ -152,18 +158,19 @@ export class UserModal extends React.Component {
 			body: data
 		}).then(function(response: any){
 			response.json().then(function(result: any){
-				//update the review from the review state thing
+				this.setState({editReview: -1})
 			}.bind(this))
 		}.bind(this))
 	}
 
 	deleteReview(event){
 		//show confirmation box
-
+		let split = event.target.id.split('-')
 		//do delete ajax
 		let categories = {
-			reviewID: event.target.id.split('-')[1],
+			reviewID: split[split.length-1],
 		}
+		console.log(event.target.id)
 		let data = JSON.stringify( categories );
 		fetch('./deleteReview', {
 			method: 'POST',
@@ -198,54 +205,18 @@ export class UserModal extends React.Component {
 
 	getUserReviews(){
 		//do delete ajax
-		// let categories = {
-		// 	username: this.props.username,
-		// }
-		// let data = JSON.stringify( categories );
-		// fetch('./getUserReviews', {
-		// 	method: 'POST',
-		// 	body: data
-		// }).then(function(response: any){
-		// 	response.json().then(function(result: any){
-		// 		this.setState({reviews: result['reviews']});
-		// 	}.bind(this))
-		// }.bind(this))
-
-		return [
-					{
-						id: 0,
-						rating: 1,
-						username: 'Test',
-						up_votes: 10,
-						down_votes: 4,
-						review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-					},
-					{
-						id: 1,
-						rating: 3,
-						username: 'Test',
-						up_votes: 15,
-						down_votes: 37,
-						review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-					},
-					{
-						id: 2,
-						rating: 2,
-						username: 'Test',
-						up_votes: 20,
-						down_votes: 2,
-						review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-					},
-					{
-						id: 3,
-						rating: 2,
-						username: 'Test',
-						up_votes: 20,
-						down_votes: 2,
-						review: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-					},
-
-				];
+		let categories = {
+			username: this.props.username,
+		}
+		let data = JSON.stringify( categories );
+		fetch('./getUserReviews', {
+			method: 'POST',
+			body: data
+		}).then(function(response: any){
+			response.json().then(function(result: any){
+				this.setState({reviews: result['reviews']});
+			}.bind(this))
+		}.bind(this))
 	}
 
 	setNewReviewRating(event){
