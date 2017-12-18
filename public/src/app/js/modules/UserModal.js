@@ -151,13 +151,24 @@ export class UserModal extends React.Component {
 			rating: this.state.newRating,
 			username: this.props.username
 		}
-		console.log(categories);
+
 		let data = JSON.stringify( categories );
 		fetch('./editReview', {
 			method: 'POST',
 			body: data
 		}).then(function(response: any){
 			response.json().then(function(result: any){
+		
+				for(let i = 0; i < this.state.reviews.length; i ++) {
+			
+					if(this.state.reviews[i]['reviewID'] == this.state.editReview) {
+				
+						let temp = this.state.reviews;
+						temp[i]['review'] = val;
+						temp[i]['rating'] = this.state.newRating;
+						this.setState({reviews: temp});
+					}
+				}
 				this.setState({editReview: -1})
 			}.bind(this))
 		}.bind(this))
@@ -170,7 +181,6 @@ export class UserModal extends React.Component {
 		let categories = {
 			reviewID: split[split.length-1],
 		}
-		console.log(event.target.id)
 		let data = JSON.stringify( categories );
 		fetch('./deleteReview', {
 			method: 'POST',

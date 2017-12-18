@@ -179,7 +179,13 @@ export class ReviewableModal extends React.Component {
 			body: data
 		}).then(function(response: any){
 			response.json().then(function(result: any){
-			
+				for(let i = 0; i < this.state.reviews.length; i++){
+					if(this.state.reviews[i]['reviewID'] == id) {
+						let temp = this.state.reviews;
+						temp[i]['up_votes'] += 1;
+						this.setState({reviews: temp});
+					}
+				}
 			}.bind(this))
 		}.bind(this))
 	}
@@ -196,7 +202,13 @@ export class ReviewableModal extends React.Component {
 			body: data
 		}).then(function(response: any){
 			response.json().then(function(result: any){
-			
+				for(let i = 0; i < this.state.reviews.length; i++){
+					if(this.state.reviews[i]['reviewID'] == id) {
+						let temp = this.state.reviews;
+						temp[i]['down_votes'] += 1;
+						this.setState({reviews: temp});
+					}
+				}
 			}.bind(this))
 		}.bind(this))
 	}
@@ -233,8 +245,9 @@ export class ReviewableModal extends React.Component {
 			body: data
 		}).then(function(response: any){
 			response.json().then(function(result: any){
-			
-				this.setState({createReview: false})
+				let temp = this.state.reviews;
+				temp.push(categories);
+				this.setState({createReview: false, reviews: temp})
 			}.bind(this))
 		}.bind(this))
 				this.setState({createReview: false})
