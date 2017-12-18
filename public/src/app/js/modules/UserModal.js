@@ -145,13 +145,13 @@ export class UserModal extends React.Component {
 
 	submitEditedReview(){
 		let val = document.getElementById('reviewable-textarea-input').value;
-		let split = event.target.id.split('-')
 		let categories = {
-			reviewID: split[split.length-1],
+			reviewID: this.state.editReview,
 			reviewText: val,
 			rating: this.state.newRating,
 			username: this.props.username
 		}
+		console.log(categories);
 		let data = JSON.stringify( categories );
 		fetch('./editReview', {
 			method: 'POST',
